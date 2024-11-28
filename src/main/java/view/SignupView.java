@@ -6,13 +6,7 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
+import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -30,11 +24,14 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
     private final JTextField usernameInputField = new JTextField(15);
     private final JPasswordField passwordInputField = new JPasswordField(15);
     private final JPasswordField repeatPasswordInputField = new JPasswordField(15);
-    private final JPasswordField heightField = new JPasswordField(15);
-    private final JPasswordField weightField = new JPasswordField(15);
-    private final JPasswordField genderField = new JPasswordField(15);
-    private final JPasswordField ageField = new JPasswordField(5);
+    private final JTextField heightField = new JTextField(15);
+    private final JTextField weightField = new JTextField(15);
+//    private final JTextField genderField = new JTextField(15);
+    private final JTextField ageField = new JTextField(5);
     private SignupController signupController;
+    private final JRadioButton maleButton = new JRadioButton("Male");
+    private final JRadioButton femaleButton = new JRadioButton("Female");
+    private final ButtonGroup genderGroup = new ButtonGroup();
 
     private final JButton signUp;
     private final JButton cancel;
@@ -57,10 +54,23 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
                 new JLabel(SignupViewModel.HEIGHT_LABEL), heightField);
         final LabelTextPanel weightInfo = new LabelTextPanel(
                 new JLabel(SignupViewModel.WEIGHT_LABEL), weightField);
-        final LabelTextPanel genderInfo = new LabelTextPanel(
-                new JLabel(SignupViewModel.GENDER_LABEL), genderField);
+//        final LabelTextPanel genderInfo = new LabelTextPanel(
+//                new JLabel(SignupViewModel.GENDER_LABEL), genderField);
         final LabelTextPanel ageInfo = new LabelTextPanel(
                 new JLabel(SignupViewModel.AGE_LABEL), ageField);
+
+        final JPanel genderInfo = new JPanel();
+        genderInfo.setLayout(new BoxLayout(genderInfo, BoxLayout.Y_AXIS));
+        genderInfo.add(new JLabel(SignupViewModel.GENDER_LABEL));
+        genderInfo.add(maleButton);
+        genderInfo.add(femaleButton);
+        genderGroup.add(maleButton);
+        genderGroup.add(femaleButton);
+
+        // Add ActionListeners to gender buttons
+        maleButton.addActionListener(e -> updateGender("Male"));
+        femaleButton.addActionListener(e -> updateGender("Female"));
+
 
         final JPanel buttons = new JPanel();
         toLogin = new JButton(SignupViewModel.TO_LOGIN_BUTTON_LABEL);
@@ -122,6 +132,25 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
         this.add(buttons);
     }
 
+    private void addGenderListener() {
+        genderGroup.add(maleButton);
+        genderGroup.add(femaleButton);
+
+        // Add ActionListener to update gender in the SignupState
+        ActionListener genderListener = e -> {
+            final SignupState currentState = signupViewModel.getState();
+            if (maleButton.isSelected()) {
+                currentState.setGender("Male");
+            } else if (femaleButton.isSelected()) {
+                currentState.setGender("Female");
+            }
+            signupViewModel.setState(currentState);
+        };
+
+        maleButton.addActionListener(genderListener);
+        femaleButton.addActionListener(genderListener);
+    }
+
     private void addAgeListener() {
         ageField.getDocument().addDocumentListener(new DocumentListener() {
 
@@ -156,30 +185,36 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
         });
     }
 
-    private void addGenderListener() {
-        genderField.getDocument().addDocumentListener(new DocumentListener() {
+//    private void addGenderListener() {
+//        genderField.getDocument().addDocumentListener(new DocumentListener() {
+//
+//            private void documentListenerHelper() {
+//                final SignupState currentState = signupViewModel.getState();
+//                currentState.setGender(genderField.getText());
+//                signupViewModel.setState(currentState);
+//            }
+//
+//            @Override
+//            public void insertUpdate(DocumentEvent e) {
+//                documentListenerHelper();
+//            }
+//
+//            @Override
+//            public void removeUpdate(DocumentEvent e) {
+//                documentListenerHelper();
+//            }
+//
+//            @Override
+//            public void changedUpdate(DocumentEvent e) {
+//                documentListenerHelper();
+//            }
+//        });
+//    }
 
-            private void documentListenerHelper() {
-                final SignupState currentState = signupViewModel.getState();
-                currentState.setGender(genderField.getText());
-                signupViewModel.setState(currentState);
-            }
-
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                documentListenerHelper();
-            }
-
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                documentListenerHelper();
-            }
-
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                documentListenerHelper();
-            }
-        });
+    private void updateGender(String gender) {
+        final SignupState currentState = signupViewModel.getState();
+        currentState.setGender(gender);
+        signupViewModel.setState(currentState);
     }
 
     private void addWeightListener() {
