@@ -26,6 +26,38 @@ public class GetReceipeInputData {
         this.ingredient = ingredient;
     }
 
+    public float getWeight() {
+        return weight;
+    }
+
+    public float getHeight() {
+        return height;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public String getMealType() {
+        return mealType;
+    }
+
+    public String getCuisineType() {
+        return cuisineType;
+    }
+
+    public String getAllergy() {
+        return allergy;
+    }
+
+    public String[] getIngredient() {
+        return ingredient;
+    }
+
     public double getBMR(){
         if (gender.equals("Male")){
             return (88.362 + (13.397 * this.weight) + (4.799 * this.height) - (5.677 * this.age));
