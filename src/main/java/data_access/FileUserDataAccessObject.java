@@ -93,9 +93,11 @@ public class FileUserDataAccessObject implements SignupUserDataAccessInterface,
             writer.newLine();
 
             for (User user : accounts.values()) {
-                final String line = String.format("%s,%s,%s,%s,%s,%s",
+                final String line = String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s",
                         user.getName(), user.getPassword(), user.getWeight(),
-                        user.getHeight(), user.getGender(), user.getAge());
+                        user.getHeight(), user.getGender(), user.getAge(),
+                        user.getMealType(), user.getCuisineType(), user.getAllergy(),
+                        String.join(",", user.getIngredient()));
                 writer.write(line);
                 writer.newLine();
             }
@@ -149,6 +151,6 @@ public class FileUserDataAccessObject implements SignupUserDataAccessInterface,
 
     @Override
     public void getReceipe(User user) {
-        //Calling API
+        // No need to save data..?
     }
 }
