@@ -137,6 +137,12 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
         this.add(buttons);
     }
 
+    private void updateGender(String gender) {
+        final SignupState currentState = signupViewModel.getState();
+        currentState.setGender(gender);
+        signupViewModel.setState(currentState);
+    }
+
     private void addGenderListener() {
         genderGroup.add(maleButton);
         genderGroup.add(femaleButton);
@@ -200,12 +206,6 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
                 System.out.println("Invalid input. Please enter a valid integer.");
             }
         });
-    }
-
-    private void updateGender(String gender) {
-        final SignupState currentState = signupViewModel.getState();
-        currentState.setGender(gender);
-        signupViewModel.setState(currentState);
     }
 
     private void addWeightListener() {
