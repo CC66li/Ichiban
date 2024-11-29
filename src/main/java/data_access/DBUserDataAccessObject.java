@@ -44,6 +44,7 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
     private static final String CUISINETYPE = "cuisineType";
     private static final String ALLERGY = "allergy";
     private static final String INGREDIENT = "ingredient";
+    private String currentUsername;
 
     private final UserFactory userFactory;
 
@@ -94,7 +95,7 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
 
     @Override
     public void setCurrentUsername(String name) {
-        // this isn't implemented for the lab
+        this.currentUsername = name;
     }
 
     @Override
@@ -270,6 +271,6 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
 
     @Override
     public String getCurrentUsername() {
-        return null;
+        return this.currentUsername;
     }
 }

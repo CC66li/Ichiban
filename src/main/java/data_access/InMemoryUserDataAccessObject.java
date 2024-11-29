@@ -64,6 +64,6 @@ public class InMemoryUserDataAccessObject implements SignupUserDataAccessInterfa
 
     @Override
     public void getReceipe(User user) {
-        //calling API
+        // No need to save the data..?
     }
 }

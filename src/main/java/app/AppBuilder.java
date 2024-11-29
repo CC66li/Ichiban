@@ -14,6 +14,7 @@ import interface_adapter.change_password.ChangePasswordController;
 import interface_adapter.change_password.ChangePasswordPresenter;
 import interface_adapter.change_password.LoggedInViewModel;
 import interface_adapter.change_weight.ChangeWeightController;
+import interface_adapter.get_receipe.GetReceipeViewModel;
 import interface_adapter.login.LoginController;
 import interface_adapter.login.LoginPresenter;
 import interface_adapter.login.LoginViewModel;
@@ -25,6 +26,7 @@ import interface_adapter.signup.SignupViewModel;
 import use_case.change_password.ChangePasswordInputBoundary;
 import use_case.change_password.ChangePasswordInteractor;
 import use_case.change_password.ChangePasswordOutputBoundary;
+import use_case.get_receipe.GetReceipeOutputBoundary;
 import use_case.login.LoginInputBoundary;
 import use_case.login.LoginInteractor;
 import use_case.login.LoginOutputBoundary;
@@ -166,6 +168,15 @@ public class AppBuilder {
         final LogoutController logoutController = new LogoutController(logoutInteractor);
         loggedInView.setLogoutController(logoutController);
         return this;
+    }
+
+    /**
+     * Adds the GetReceipt Use Case to the application.
+     * @return this builder
+     */
+    public AppBuilder addGetReceiptUseCase() {
+        final GetReceipeOutputBoundary getReceipeOutputBoundary = new GetReceipePresenter(viewManagerModel,
+                GetReceipeViewModel, loginViewModel);
     }
 
     /**
