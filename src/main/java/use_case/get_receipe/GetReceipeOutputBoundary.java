@@ -10,7 +10,7 @@ public interface GetReceipeOutputBoundary {
      * Prepares the success view for the Change Password Use Case.
      * @param outputData the output data
      */
-    void prepareSuccessView(ChangePasswordOutputData outputData);
+    void prepareSuccessView(GetReceipeOutputData outputData);
 
     /**
      * Prepares the failure view for the Change Password Use Case.
