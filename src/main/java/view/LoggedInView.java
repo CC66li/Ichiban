@@ -32,6 +32,7 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
     private final JRadioButton lunchButton = new JRadioButton("Lunch");
     private final JRadioButton dinnerButton = new JRadioButton("Dinner");
     private final ButtonGroup mealGroup = new ButtonGroup();
+  
     private final JRadioButton alcoButton = new JRadioButton("Alcohol-Free");
     private final JRadioButton dairyButton = new JRadioButton("Dairy-Free");
     private final JRadioButton peanutButton = new JRadioButton("Peanut-Free");
@@ -40,6 +41,7 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
     private final JRadioButton eggButton = new JRadioButton("Egg-Free");
     private final JRadioButton healthButton = new JRadioButton("No Allergy");
     private final ButtonGroup allergyGroup = new ButtonGroup();
+    
     private final JRadioButton chiButton = new JRadioButton("Chinese");
     private final JRadioButton freButton = new JRadioButton("French");
     private final JRadioButton indButton = new JRadioButton("Indian");
