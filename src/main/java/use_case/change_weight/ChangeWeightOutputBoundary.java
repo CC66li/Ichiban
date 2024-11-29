@@ -1,6 +1,5 @@
 package use_case.change_weight;
 
-import use_case.change_password.ChangePasswordOutputData;
 
 /**
  * The output boundary for the Change Weight Use Case.
