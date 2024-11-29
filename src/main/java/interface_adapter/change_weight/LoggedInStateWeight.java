@@ -3,7 +3,7 @@ package interface_adapter.change_weight;
 /**
  * The State information representing the logged-in user.
  */
-public class LoggedInState {
+public class LoggedInStateWeight {
     private String username = "";
 
     private String password = "";
@@ -11,7 +11,6 @@ public class LoggedInState {
     private float weight = 0;
     private String gender = "";
     private int age = 0;
-    private String passwordError;
 
 //    public LoggedInState(LoggedInState copy) {
 //        username = copy.username;
@@ -34,10 +33,6 @@ public class LoggedInState {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public void setPasswordError(String passwordError) {
-        this.passwordError = passwordError;
     }
 
     public String getPassword() {

@@ -12,6 +12,10 @@ public class LoggedInState {
     private String gender = "";
     private int age = 0;
     private String passwordError;
+    private String mealType;
+    private String allergy;
+    private String cuisineType;
+    private String[] ingredient;
 
     //public LoggedInState(LoggedInState copy) {
     //    username = copy.username;
@@ -73,5 +77,37 @@ public class LoggedInState {
 
     public void setAge(int age) {
         this.age = age;
+    }
+
+    public String getMealType() {
+        return mealType;
+    }
+
+    public void setMealType(String mealType) {
+        this.mealType = mealType;
+    }
+
+    public String getAllergy() {
+        return allergy;
+    }
+
+    public void setAllergy(String allergy) {
+        this.allergy = allergy;
+    }
+
+    public String getCuisineType() {
+        return cuisineType;
+    }
+
+    public void setCuisineType(String cuisineType) {
+        this.cuisineType = cuisineType;
+    }
+
+    public String[] getIngredient() {
+        return ingredient;
+    }
+
+    public void setIngredient(String[] ingredient) {
+        this.ingredient = ingredient;
     }
 }
