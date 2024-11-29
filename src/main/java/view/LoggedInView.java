@@ -15,9 +15,8 @@ import interface_adapter.change_password.LoggedInViewModel;
 import interface_adapter.change_weight.ChangeWeightController;
 import interface_adapter.change_password.ChangePasswordController;
 import interface_adapter.get_receipe.GetReceipeController;
+import interface_adapter.get_receipe.GetReceipeViewModel;
 import interface_adapter.logout.LogoutController;
-import interface_adapter.change_password.LoggedInViewModel;
-import interface_adapter.logged_in.LoggedInController;
 
 /**
  * The View for when the user is logged into the program.
@@ -26,7 +25,6 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
 
     private final String viewName = "logged in";
     private final LoggedInViewModel loggedInViewModel;
-    private final JLabel passwordErrorField = new JLabel();
     private ChangeWeightController changeWeightController;
     private ChangePasswordController changePasswordController;
     private final JTextField ingredientField = new JTextField(150);
@@ -34,12 +32,13 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
     private final JRadioButton lunchButton = new JRadioButton("Lunch");
     private final JRadioButton dinnerButton = new JRadioButton("Dinner");
     private final ButtonGroup mealGroup = new ButtonGroup();
-    private final JCheckBox alcoButton = new JCheckBox("Alcohol-Free");
-    private final JCheckBox dairyButton = new JCheckBox("Dairy-Free");
-    private final JCheckBox peanutButton = new JCheckBox("Peanut-Free");
-    private final JCheckBox vegetarianButton = new JCheckBox("Vegetarian");
-    private final JCheckBox glutenButton = new JCheckBox("Gluten-Free");
-    private final JCheckBox eggButton = new JCheckBox("Egg-Free");
+    private final JRadioButton alcoButton = new JRadioButton("Alcohol-Free");
+    private final JRadioButton dairyButton = new JRadioButton("Dairy-Free");
+    private final JRadioButton peanutButton = new JRadioButton("Peanut-Free");
+    private final JRadioButton vegetarianButton = new JRadioButton("Vegetarian");
+    private final JRadioButton glutenButton = new JRadioButton("Gluten-Free");
+    private final JRadioButton eggButton = new JRadioButton("Egg-Free");
+    private final JRadioButton healthButton = new JRadioButton("No Allergy");
     private final ButtonGroup allergyGroup = new ButtonGroup();
     private final JRadioButton chiButton = new JRadioButton("Chinese");
     private final JRadioButton freButton = new JRadioButton("French");
@@ -50,6 +49,7 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
     private final JRadioButton itaButton = new JRadioButton("Italian");
     private final ButtonGroup typeGroup = new ButtonGroup();
     private LogoutController logoutController;
+    private GetReceipeController getReceipeController;
 
     private final JLabel username;
 
@@ -66,9 +66,10 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         //Set the Types buttons here
-        final LabelTextPanel ingredientInputField = new LabelTextPanel(
-                new JLabel("Ingredients"), ingredientField);
+        final LabelTextPanel ingredientInfo = new LabelTextPanel(
+                new JLabel(LoggedInViewModel.INGREDIENT_LABEL), ingredientField);
 
+        // Meal types chooser
         final JPanel mealInfo = new JPanel();
         mealInfo.setLayout(new BoxLayout(mealInfo, BoxLayout.Y_AXIS));
         mealInfo.add(new JLabel(LoggedInViewModel.MEAL_LABEL));
@@ -79,7 +80,6 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
         mealGroup.add(lunchButton);
         mealGroup.add(dinnerButton);
 
-        // Add ActionListeners to gender buttons
         breakButton.addActionListener(e -> updateMeal("Breakfast"));
         lunchButton.addActionListener(e -> updateMeal("Lunch"));
         dinnerButton.addActionListener(e -> updateMeal("Dinner"));
@@ -87,6 +87,62 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
         final JLabel usernameInfo = new JLabel("Currently logged in: ");
         usernameInfo.setAlignmentX(Component.CENTER_ALIGNMENT);
         username = new JLabel();
+
+        // Cuisine types chooser
+        final JPanel cuisineInfo = new JPanel();
+        cuisineInfo.setLayout(new BoxLayout(cuisineInfo, BoxLayout.Y_AXIS));
+        cuisineInfo.add(new JLabel(LoggedInViewModel.CUISINE_LABEL));
+
+        cuisineInfo.add(chiButton);
+        cuisineInfo.add(freButton);
+        cuisineInfo.add(indButton);
+        cuisineInfo.add(japButton);
+        cuisineInfo.add(korButton);
+        cuisineInfo.add(ameButton);
+        cuisineInfo.add(itaButton);
+        typeGroup.add(chiButton);
+        typeGroup.add(freButton);
+        typeGroup.add(indButton);
+        typeGroup.add(japButton);
+        typeGroup.add(korButton);
+        typeGroup.add(ameButton);
+        typeGroup.add(itaButton);
+
+        chiButton.addActionListener(e -> updateType("Chinese"));
+        freButton.addActionListener(e -> updateType("French"));
+        indButton.addActionListener(e -> updateType("Indian"));
+        japButton.addActionListener(e -> updateType("Japanese"));
+        korButton.addActionListener(e -> updateType("Korean"));
+        ameButton.addActionListener(e -> updateType("American"));
+        itaButton.addActionListener(e -> updateType("Italian"));
+
+        // Allergy types chooser
+        final JPanel allergyInfo = new JPanel();
+        allergyInfo.setLayout(new BoxLayout(allergyInfo, BoxLayout.Y_AXIS));
+        allergyInfo.add(new JLabel(LoggedInViewModel.ALLERGY_LABEL));
+
+        allergyInfo.add(alcoButton);
+        allergyInfo.add(dairyButton);
+        allergyInfo.add(peanutButton);
+        allergyInfo.add(vegetarianButton);
+        allergyInfo.add(glutenButton);
+        allergyInfo.add(eggButton);
+        allergyInfo.add(healthButton);
+        allergyGroup.add(alcoButton);
+        allergyGroup.add(dairyButton);
+        allergyGroup.add(peanutButton);
+        allergyGroup.add(vegetarianButton);
+        allergyGroup.add(glutenButton);
+        allergyGroup.add(eggButton);
+        allergyGroup.add(healthButton);
+
+        alcoButton.addActionListener(e -> updateAllergy("alcohol-free"));
+        dairyButton.addActionListener(e -> updateAllergy("dairy-free"));
+        peanutButton.addActionListener(e -> updateAllergy("peanut-free"));
+        vegetarianButton.addActionListener(e -> updateAllergy("vegetarian"));
+        glutenButton.addActionListener(e -> updateAllergy("gluten-free"));
+        eggButton.addActionListener(e -> updateAllergy("egg-free"));
+        healthButton.addActionListener(e -> updateAllergy(null));
 
 
         final JPanel buttons = new JPanel();
@@ -174,21 +230,23 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
                 }
         );
 
-        //JButton finalGenerateReceipt = generateReceipt;
         generateReceipt.addActionListener(
                 // This creates an anonymous subclass of ActionListener and instantiates it.
                 new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
                         if (evt.getSource().equals(generateReceipt)) {
                             final LoggedInState currentState = loggedInViewModel.getState();
-                            GetReceipeController controller = new GetReceipeController();
 
-                            controller.execute(
+                            getReceipeController.execute(
+                                    currentState.getUsername(),
+                                    currentState.getPassword(),
                                     currentState.getHeight(),
                                     currentState.getWeight(),
                                     currentState.getGender(),
                                     currentState.getAge(),
+                                    currentState.getMealType(),
                                     currentState.getCuisineType(),
+                                    currentState.getAllergy(),
                                     currentState.getIngredient()
                             );
                         }
@@ -196,15 +254,98 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
                 }
         );
 
+        addIngredientListener();
+        addMealTypeListener();
+        addCuisineTypeListener();
+        addAllergyListener();
+
         this.add(title);
         this.add(usernameInfo);
         this.add(username);
 
-        this.add(passwordInfo);
-        this.add(passwordErrorField);
+        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
+        this.add(ingredientInfo);
+        this.add(mealInfo);
+        this.add(cuisineInfo);
+        this.add(allergyInfo);
         this.add(buttons);
     }
 
+    // Cuisine types generator
+    private void updateType(String cuisine) {
+        final LoggedInState currentState = loggedInViewModel.getState();
+        currentState.setCuisineType(cuisine);
+        loggedInViewModel.setState(currentState);
+    }
+
+    private void addCuisineTypeListener() {
+        typeGroup.add(chiButton);
+        typeGroup.add(freButton);
+        typeGroup.add(indButton);
+        typeGroup.add(japButton);
+        typeGroup.add(korButton);
+        typeGroup.add(ameButton);
+        typeGroup.add(itaButton);
+
+        // Add ActionListener to update gender in the SignupState
+        ActionListener cuisineTypeListener = e -> {
+            final LoggedInState currentState = loggedInViewModel.getState();
+            if (chiButton.isSelected()) {
+                currentState.setCuisineType("Chinese");
+            } else if (freButton.isSelected()) {
+                currentState.setCuisineType("French");
+            } else if (indButton.isSelected()) {
+                currentState.setCuisineType("Indian");
+            } else if (japButton.isSelected()) {
+                currentState.setCuisineType("Japanese");
+            } else if (korButton.isSelected()) {
+                currentState.setCuisineType("Korean");
+            } else if (ameButton.isSelected()) {
+                currentState.setCuisineType("American");
+            } else if (itaButton.isSelected()) {
+                currentState.setCuisineType("Italian");
+            }
+            loggedInViewModel.setState(currentState);
+        };
+
+        chiButton.addActionListener(cuisineTypeListener);
+        freButton.addActionListener(cuisineTypeListener);
+        indButton.addActionListener(cuisineTypeListener);
+        japButton.addActionListener(cuisineTypeListener);
+        korButton.addActionListener(cuisineTypeListener);
+        ameButton.addActionListener(cuisineTypeListener);
+        itaButton.addActionListener(cuisineTypeListener);
+    }
+
+    // Ingredients collectors
+    private void addIngredientListener() {
+        ingredientField.getDocument().addDocumentListener(new DocumentListener() {
+
+            private void documentListenerHelper() {
+                final LoggedInState currentState = loggedInViewModel.getState();
+                currentState.setUsername(ingredientField.getText());
+                loggedInViewModel.setState(currentState);
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                documentListenerHelper();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                documentListenerHelper();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                documentListenerHelper();
+            }
+        });
+    }
+
+    // Meal types generator
     private void updateMeal(String meal) {
         final LoggedInState currentState = loggedInViewModel.getState();
         currentState.setMealType(meal);
@@ -220,18 +361,66 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
         ActionListener mealTypeListener = e -> {
             final LoggedInState currentState = loggedInViewModel.getState();
             if (breakButton.isSelected()) {
-                currentState.setGender("Breakfast");
+                currentState.setMealType("Breakfast");
             } else if (lunchButton.isSelected()) {
-                currentState.setGender("Lunch");
+                currentState.setMealType("Lunch");
             } else if (dinnerButton.isSelected()) {
-                currentState.setGender("Dinner");
+                currentState.setMealType("Dinner");
             }
             loggedInViewModel.setState(currentState);
         };
 
         breakButton.addActionListener(mealTypeListener);
         lunchButton.addActionListener(mealTypeListener);
+        dinnerButton.addActionListener(mealTypeListener);
     }
+
+    // Allergy types collector
+    private void updateAllergy(String allergy) {
+        final LoggedInState currentState = loggedInViewModel.getState();
+        currentState.setAllergy(allergy);
+        loggedInViewModel.setState(currentState);
+    }
+
+    private void addAllergyListener() {
+        allergyGroup.add(alcoButton);
+        allergyGroup.add(dairyButton);
+        allergyGroup.add(peanutButton);
+        allergyGroup.add(vegetarianButton);
+        allergyGroup.add(glutenButton);
+        allergyGroup.add(eggButton);
+        allergyGroup.add(healthButton);
+
+        // Add ActionListener to update gender in the SignupState
+        ActionListener allergyListener = e -> {
+            final LoggedInState currentState = loggedInViewModel.getState();
+            if (alcoButton.isSelected()) {
+                currentState.setAllergy("alcohol-free");
+            } else if (dairyButton.isSelected()) {
+                currentState.setAllergy("dairy-free");
+            } else if (peanutButton.isSelected()) {
+                currentState.setAllergy("peanut-free");
+            } else if (vegetarianButton.isSelected()) {
+                currentState.setAllergy("vegetarian");
+            } else if (glutenButton.isSelected()) {
+                currentState.setAllergy("gluten-free");
+            } else if (eggButton.isSelected()) {
+                currentState.setAllergy("egg-free");
+            } else if (healthButton.isSelected()) {
+                currentState.setAllergy(null);
+            }
+            loggedInViewModel.setState(currentState);
+        };
+
+        alcoButton.addActionListener(allergyListener);
+        dairyButton.addActionListener(allergyListener);
+        peanutButton.addActionListener(allergyListener);
+        vegetarianButton.addActionListener(allergyListener);
+        glutenButton.addActionListener(allergyListener);
+        eggButton.addActionListener(allergyListener);
+        healthButton.addActionListener(allergyListener);
+    }
+
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
