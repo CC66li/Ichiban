@@ -14,6 +14,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import use_case.change_password.ChangePasswordUserDataAccessInterface;
 import use_case.change_weight.ChangeWeightUserDataAccessInterface;
+import use_case.get_receipe.GetReceipeInputData;
 import use_case.get_receipe.GetReceipeUserDataAccessInterface;
 import use_case.login.LoginUserDataAccessInterface;
 import use_case.logout.LogoutUserDataAccessInterface;
@@ -35,15 +36,19 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
     private static final String USERNAME = "username";
     private static final String PASSWORD = "password";
     private static final String MESSAGE = "message";
-    private static final float HEIGHT = 0;
-    private static final float WEIGHT = 0;
+    private static final String HEIGHT = "height";
+    private static final String WEIGHT = "weight";
     private static final String GENDER = "male";
-    private static final int AGE = 0;
+    private static final String AGE = "age";
+    private static final String MEALTYPE = "mealType";
+    private static final String CUISINETYPE = "cuisineType";
+    private static final String ALLERGY = "allergy";
+    private static final String INGREDIENT = "ingredient";
+
     private final UserFactory userFactory;
 
     public DBUserDataAccessObject(UserFactory userFactory) {
         this.userFactory = userFactory;
-        // No need to do anything to reinitialize a user list! The data is the cloud that may be miles away.
     }
 
     @Override
@@ -63,13 +68,20 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
                 final JSONObject userJSONObject = responseBody.getJSONObject("user");
                 final String name = userJSONObject.getString(USERNAME);
                 final String password = userJSONObject.getString(PASSWORD);
-                final String height = userJSONObject.getString(String.valueOf(HEIGHT));
-                final String weight = userJSONObject.getString(String.valueOf(WEIGHT));
+                final String height = userJSONObject.getString(HEIGHT);
+                final String weight = userJSONObject.getString(WEIGHT);
                 final String gender = userJSONObject.getString(GENDER);
-                final String age = userJSONObject.getString(String.valueOf(AGE));
+                final String age = userJSONObject.getString(AGE);
+                final String mealType = userJSONObject.getString(MEALTYPE);
+                final String cuisineType = userJSONObject.getString(CUISINETYPE);
+                final String allergy = userJSONObject.getString(ALLERGY);
+                final String ingredient = userJSONObject.getString(INGREDIENT);
+
+                final String[] listIngredient = ingredient.split(",");
 
                 return userFactory.create(name, password, Float.parseFloat(height),
-                        Float.parseFloat(weight), gender, Integer.parseInt(age));
+                        Float.parseFloat(weight), gender, Integer.parseInt(age),
+                        mealType, cuisineType, allergy, listIngredient);
             }
             else {
                 throw new RuntimeException(responseBody.getString(MESSAGE));
@@ -180,7 +192,7 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         final MediaType mediaType = MediaType.parse(CONTENT_TYPE_JSON);
         final JSONObject requestBody = new JSONObject();
         requestBody.put(USERNAME, user.getName());
-        requestBody.put(String.valueOf(WEIGHT), user.getWeight());
+        requestBody.put(WEIGHT, user.getWeight());
         final RequestBody body = RequestBody.create(requestBody.toString(), mediaType);
         final Request request = new Request.Builder()
                 .url("http://vm003.teach.cs.toronto.edu:20112/user")
@@ -209,9 +221,33 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         final OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
 
-        String requestUrl = "https://api.edamam.com/api/recipes/v2?type=public&app_id=<APP_ID>&app_key=<APP_KEY>&q=chicken&diet=balanced&health=alcohol-free&health=dairy-free&cuisineType=American&cuisineType=Chinese&cuisineType=Indian&mealType=Lunch&mealType=Dinner&calories=100-1000&time=0-100";
+        GetReceipeInputData getReceipeInputData = new GetReceipeInputData(user.getHeight(),
+                                                                          user.getWeight(),
+                                                                          user.getGender(),
+                                                                          user.getAge(),
+                                                                          user.getMealType(),
+                                                                          user.getCuisineType(),
+                                                                          user.getAllergy(),
+                                                                          user.getIngredient());
+
+        //According to the input get the url
+        String requestUrl = "https://api.edamam.com/api/recipes/v2?type=public&app_id=<%s>&app_key=<%s>";
+        if (user.getIngredient() != null){
+            for (String item: user.getIngredient()){
+                requestUrl += "&q=" + item;
+            }
+        }
+        if (user.getAllergy() != null){
+            requestUrl += "&health=" + user.getAllergy();
+        }
+        if (user.getCuisineType() != null){
+            requestUrl += "&cuisineType=" + user.getCuisineType();
+        }
+        requestUrl += "&calories=0-" + getReceipeInputData.getBMR();
+
+
         final Request request = new Request.Builder()
-                .url(requestUrl)
+                .url(String.format(requestUrl, user.getName(), user.getPassword()))
                 .method("GET", null)
                 .addHeader(CONTENT_TYPE_LABEL, CONTENT_TYPE_JSON)
                 .build();

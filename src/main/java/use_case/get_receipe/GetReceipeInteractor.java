@@ -22,16 +22,6 @@ public class GetReceipeInteractor implements GetReceipeInputBoundary {
 
     @Override
     public void execute(GetReceipeInputData getReceipeInputData) {
-        final User user = userFactory.create(changePasswordInputData.getUsername(),
-                                             changePasswordInputData.getPassword(),
-                                             changePasswordInputData.getHeight(),
-                                             changePasswordInputData.getWeight(),
-                                             changePasswordInputData.getGender(),
-                                             changePasswordInputData.getAge());
-        userDataAccessObject.changePassword(user);
 
-        final ChangePasswordOutputData changePasswordOutputData = new ChangePasswordOutputData(user.getName(),
-                                                                                  false);
-        userPresenter.prepareSuccessView(changePasswordOutputData);
     }
 }

@@ -27,7 +27,7 @@ public class FileUserDataAccessObject implements SignupUserDataAccessInterface,
                                                  ChangePasswordUserDataAccessInterface,
                                                  GetReceipeUserDataAccessInterface {
 
-    private static final String HEADER = "username,password, weight, height, gender, age";
+    private static final String HEADER = "username,password, weight, height, gender, age, mealType, cuisineType, allergy, ingredient";
 
     private final File csvFile;
     private final Map<String, Integer> headers = new LinkedHashMap<>();
@@ -43,6 +43,10 @@ public class FileUserDataAccessObject implements SignupUserDataAccessInterface,
         headers.put("height", 3);
         headers.put("gender", 4);
         headers.put("age", 5);
+        headers.put("mealType", 6);
+        headers.put("cuisineType", 7);
+        headers.put("allergy", 8);
+        headers.put("ingredient", 9);
 
         if (csvFile.length() == 0) {
             save();
@@ -65,9 +69,16 @@ public class FileUserDataAccessObject implements SignupUserDataAccessInterface,
                     final String height = String.valueOf(col[headers.get("height")]);
                     final String gender = String.valueOf(col[headers.get("gender")]);
                     final String age = String.valueOf(col[headers.get("age")]);
+                    final String mealType = String.valueOf(col[headers.get("mealType")]);
+                    final String cuisineType = String.valueOf(col[headers.get("cuisineType")]);
+                    final String allergy = String.valueOf(col[headers.get("allergy")]);
+                    final String ingredient = String.valueOf(col[headers.get("ingredient")]);
+
+                    String[] listIngredient = ingredient.split(",");
 
                     final User user = userFactory.create(username, password, Float.parseFloat(height),
-                            Float.parseFloat(weight), gender, Integer.parseInt(age));
+                            Float.parseFloat(weight), gender, Integer.parseInt(age),
+                            mealType, cuisineType, allergy, listIngredient);
                     accounts.put(username, user);
                 }
             }
