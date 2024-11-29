@@ -230,7 +230,7 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
                                                                           user.getAllergy(),
                                                                           user.getIngredient());
 
-        //According to the input get the url
+        // According to the input get the url
         String requestUrl = "https://api.edamam.com/api/recipes/v2?type=public&app_id=<%s>&app_key=<%s>";
         if (user.getIngredient() != null){
             for (String item: user.getIngredient()){
