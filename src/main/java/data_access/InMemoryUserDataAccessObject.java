@@ -6,6 +6,7 @@ import java.util.Map;
 import entity.User;
 import use_case.change_password.ChangePasswordUserDataAccessInterface;
 import use_case.change_weight.ChangeWeightUserDataAccessInterface;
+import use_case.get_receipe.GetReceipeUserDataAccessInterface;
 import use_case.login.LoginUserDataAccessInterface;
 import use_case.logout.LogoutUserDataAccessInterface;
 import use_case.signup.SignupUserDataAccessInterface;
@@ -18,7 +19,8 @@ public class InMemoryUserDataAccessObject implements SignupUserDataAccessInterfa
         LoginUserDataAccessInterface,
         ChangePasswordUserDataAccessInterface,
         ChangeWeightUserDataAccessInterface,
-        LogoutUserDataAccessInterface {
+        LogoutUserDataAccessInterface,
+        GetReceipeUserDataAccessInterface {
 
     private final Map<String, User> users = new HashMap<>();
 
@@ -58,5 +60,10 @@ public class InMemoryUserDataAccessObject implements SignupUserDataAccessInterfa
     @Override
     public String getCurrentUsername() {
         return this.currentUsername;
+    }
+
+    @Override
+    public void getReceipe(User user) {
+        //calling API
     }
 }

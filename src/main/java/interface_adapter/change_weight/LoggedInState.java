@@ -13,20 +13,16 @@ public class LoggedInState {
     private int age = 0;
     private String passwordError;
 
-    public LoggedInState(LoggedInState copy) {
-        username = copy.username;
-        password = copy.password;
-        height = copy.height;
-        weight = copy.weight;
-        gender = copy.gender;
-        age = copy.age;
-        passwordError = copy.passwordError;
-    }
+//    public LoggedInState(LoggedInState copy) {
+//        username = copy.username;
+//        password = copy.password;
+//        height = copy.height;
+//        weight = copy.weight;
+//        gender = copy.gender;
+//        age = copy.age;
+//        passwordError = copy.passwordError;
+//    }
 
-    // Because of the previous copy constructor, the default constructor must be explicit.
-    public LoggedInState() {
-
-    }
 
     public String getUsername() {
         return username;

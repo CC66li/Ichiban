@@ -14,6 +14,7 @@ import entity.User;
 import entity.UserFactory;
 import use_case.change_password.ChangePasswordUserDataAccessInterface;
 import use_case.change_weight.ChangeWeightUserDataAccessInterface;
+import use_case.get_receipe.GetReceipeUserDataAccessInterface;
 import use_case.login.LoginUserDataAccessInterface;
 import use_case.signup.SignupUserDataAccessInterface;
 
@@ -23,7 +24,8 @@ import use_case.signup.SignupUserDataAccessInterface;
 public class FileUserDataAccessObject implements SignupUserDataAccessInterface,
                                                  LoginUserDataAccessInterface,
                                                  ChangeWeightUserDataAccessInterface,
-                                                 ChangePasswordUserDataAccessInterface {
+                                                 ChangePasswordUserDataAccessInterface,
+                                                 GetReceipeUserDataAccessInterface {
 
     private static final String HEADER = "username,password, weight, height, gender, age";
 
@@ -132,5 +134,10 @@ public class FileUserDataAccessObject implements SignupUserDataAccessInterface,
     public void changeWeight(User user) {
         accounts.put(user.getName(), user);
         save();
+    }
+
+    @Override
+    public void getReceipe(User user) {
+        //Calling API
     }
 }
