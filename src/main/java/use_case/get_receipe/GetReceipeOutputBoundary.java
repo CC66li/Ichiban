@@ -1,6 +1,5 @@
 package use_case.get_receipe;
 
-import use_case.change_password.ChangePasswordOutputData;
 
 /**
  * The output boundary for the Change Password Use Case.

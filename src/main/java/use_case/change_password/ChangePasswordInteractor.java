@@ -2,6 +2,7 @@ package use_case.change_password;
 
 import entity.User;
 import entity.UserFactory;
+import use_case.get_receipe.GetReceipeInputData;
 
 /**
  * The Change Password Interactor.
@@ -20,13 +21,17 @@ public class ChangePasswordInteractor implements ChangePasswordInputBoundary {
     }
 
     @Override
-    public void execute(ChangePasswordInputData changePasswordInputData) {
+    public void execute(ChangePasswordInputData changePasswordInputData, GetReceipeInputData getReceipeInputData) {
         final User user = userFactory.create(changePasswordInputData.getUsername(),
                                              changePasswordInputData.getPassword(),
                                              changePasswordInputData.getHeight(),
                                              changePasswordInputData.getWeight(),
                                              changePasswordInputData.getGender(),
-                                             changePasswordInputData.getAge());
+                                             changePasswordInputData.getAge(),
+                                             getReceipeInputData.getMealType(),
+                                             getReceipeInputData.getCuisineType(),
+                                             getReceipeInputData.getAllergy(),
+                                             getReceipeInputData.getIngredient());
         userDataAccessObject.changePassword(user);
 
         final ChangePasswordOutputData changePasswordOutputData = new ChangePasswordOutputData(user.getName(),

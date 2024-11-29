@@ -2,6 +2,7 @@ package interface_adapter.change_password;
 
 import use_case.change_password.ChangePasswordInputBoundary;
 import use_case.change_password.ChangePasswordInputData;
+import use_case.get_receipe.GetReceipeInputData;
 
 /**
  * Controller for the Change Password Use Case.
@@ -19,10 +20,13 @@ public class ChangePasswordController {
      * @param username the user whose password to change
      */
     public void execute(String password, String username, float height, float weight,
-                        String gender, int age) {
+                        String gender, int age, String mealType, String cuisineType, String allergy,
+                        String[] ingredient) {
         final ChangePasswordInputData changePasswordInputData = new ChangePasswordInputData(username, password,
                 height, weight, gender, age);
+        final GetReceipeInputData getReceipeInputData = new GetReceipeInputData(height, weight, gender, age,
+                mealType, cuisineType, allergy, ingredient);
 
-        userChangePasswordUseCaseInteractor.execute(changePasswordInputData);
+        userChangePasswordUseCaseInteractor.execute(changePasswordInputData, getReceipeInputData);
     }
 }
