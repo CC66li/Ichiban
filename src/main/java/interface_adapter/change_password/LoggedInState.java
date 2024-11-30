@@ -113,4 +113,8 @@ public class LoggedInState {
     public void setIngredient(String[] ingredient) {
         this.ingredient = ingredient;
     }
+
+    public void setLoginError(String errorMessage) {
+        this.passwordError = errorMessage;
+    }
 }

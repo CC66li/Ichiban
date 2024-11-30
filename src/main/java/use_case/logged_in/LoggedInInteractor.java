@@ -2,45 +2,41 @@ package use_case.logged_in;
 
 import entity.User;
 import entity.UserFactory;
-import use_case.signup.*;
+import use_case.login.LoginInputData;
 
 /**
  * The Signup Interactor.
  */
-public class LoggedInInteractor implements SignupInputBoundary {
-    private final SignupUserDataAccessInterface userDataAccessObject;
-    private final SignupOutputBoundary userPresenter;
+public class LoggedInInteractor implements LoggedInInputBoundary {
+    private final LoggedInUserDataAccessInterface userDataAccessObject;
+    private final LoggedInOutputBoundary userPresenter;
     private final UserFactory userFactory;
 
-    public LoggedInInteractor(SignupUserDataAccessInterface signupDataAccessInterface,
-                              SignupOutputBoundary signupOutputBoundary,
+    public LoggedInInteractor(LoggedInUserDataAccessInterface loggedInUserDataAccessInterface,
+                              LoggedInOutputBoundary loggedInOutputBoundary,
                               UserFactory userFactory) {
-        this.userDataAccessObject = signupDataAccessInterface;
-        this.userPresenter = signupOutputBoundary;
+        this.userDataAccessObject = loggedInUserDataAccessInterface;
+        this.userPresenter = loggedInOutputBoundary;
         this.userFactory = userFactory;
     }
 
     @Override
-    public void execute(SignupInputData signupInputData) {
-        if (userDataAccessObject.existsByName(signupInputData.getUsername())) {
-            userPresenter.prepareFailView("User already exists.");
-        }
-        else if (!signupInputData.getPassword().equals(signupInputData.getRepeatPassword())) {
-            userPresenter.prepareFailView("Passwords don't match.");
-        }
-        else {
-            final User user = userFactory.create(signupInputData.getUsername(), signupInputData.getPassword(),
-                    signupInputData.getHeight(), signupInputData.getWeight(), signupInputData.getGender(),
-                    signupInputData.getAge(), null, null, null, null);
-            userDataAccessObject.save(user);
+    public void execute(LoggedInInputData loggedinInputData, LoginInputData loginInputData) {
 
-            final SignupOutputData signupOutputData = new SignupOutputData(user.getName(), false);
-            userPresenter.prepareSuccessView(signupOutputData);
-        }
+        final User user = userFactory.create(loginInputData.getUsername(), loginInputData.getPassword(),
+                loggedinInputData.getHeight(), loggedinInputData.getWeight(), loggedinInputData.getGender(),
+                loggedinInputData.getAge(), loggedinInputData.getMealType(), loggedinInputData.getCuisineType(),
+                loggedinInputData.getAllergy(), loggedinInputData.getIngredient());
+        userDataAccessObject.save(user);
+
+        final LoggedInOutputData loggedInOutputData = new LoggedInOutputData(user.getName(), user.getPassword(),
+                user.getHeight(), user.getWeight(), user.getGender(), user.getAge(),
+                user.getMealType(), user.getCuisineType(), user.getAllergy(), user.getIngredient(), false);
+        userPresenter.prepareSuccessView(loggedInOutputData);
     }
 
     @Override
-    public void switchToLoginView() {
-        userPresenter.switchToLoginView();
+    public void switchToGetReceiptView() {
+        userPresenter.switchToGetReceiptView();
     }
 }

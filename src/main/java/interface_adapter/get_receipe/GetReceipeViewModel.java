@@ -7,11 +7,11 @@ import interface_adapter.login.LoginState;
 /**
  * The View Model for the GetReceipe prepare ingredients and meal type View.
  */
-public class GetReceipeViewModel extends ViewModel<LoggedInState> {
+    public class GetReceipeViewModel extends ViewModel<GetReceipeState> {
 
     public void GetReipeViewModel() {
-        new GetReceipeViewModel("logged in");
-        setState(new LoggedInState());
+        new GetReceipeViewModel("Receipt Generate");
+        setState(new GetReceipeState());
     }
 
     public GetReceipeViewModel(String viewName) {

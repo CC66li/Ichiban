@@ -11,7 +11,7 @@ public interface LoggedInOutputBoundary {
      * Prepares the success view for the Signup Use Case.
      * @param outputData the output data
      */
-    void prepareSuccessView(SignupOutputData outputData);
+    void prepareSuccessView(LoggedInOutputData outputData);
 
     /**
      * Prepares the failure view for the Signup Use Case.
@@ -20,7 +20,7 @@ public interface LoggedInOutputBoundary {
     void prepareFailView(String errorMessage);
 
     /**
-     * Switches to the Login View.
+     * Executes the switch to Get Receipt view use case.
      */
-    void switchToLoginView();
+    void switchToGetReceiptView();
 }
