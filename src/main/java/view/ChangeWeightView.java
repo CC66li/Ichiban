@@ -105,7 +105,11 @@ public class ChangeWeightView extends JPanel implements PropertyChangeListener {
                                 currentState.getHeight(),
                                 currentState.getWeight(),
                                 currentState.getGender(),
-                                currentState.getAge(), null, null, null, null
+                                currentState.getAge(),
+                                currentState.getMealType(),
+                                currentState.getCuisineType(),
+                                currentState.getAllergy(),
+                                currentState.getIngredient()
                         );
                     }
                 }
