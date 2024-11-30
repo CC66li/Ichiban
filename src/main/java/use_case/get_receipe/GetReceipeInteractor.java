@@ -2,7 +2,6 @@ package use_case.get_receipe;
 
 import entity.User;
 import entity.UserFactory;
-import use_case.change_password.ChangePasswordOutputData;
 import use_case.login.LoginInputData;
 
 /**
@@ -39,5 +38,10 @@ public class GetReceipeInteractor implements GetReceipeInputBoundary {
         final GetReceipeOutputData getReceipeOutputData = new GetReceipeOutputData(user.getName(),
                                                                                   false);
         userPresenter.prepareSuccessView(getReceipeOutputData);
+    }
+
+    @Override
+    public void switchToReceiptView() {
+        userPresenter.switchToReceiptView();
     }
 }

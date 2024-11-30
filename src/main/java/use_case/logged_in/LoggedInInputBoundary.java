@@ -1,5 +1,6 @@
 package use_case.logged_in;
 
+import use_case.login.LoginInputData;
 import use_case.signup.SignupInputData;
 
 /**
@@ -9,12 +10,13 @@ public interface LoggedInInputBoundary {
 
     /**
      * Executes the signup use case.
-     * @param signupInputData the input data
+     * @param loggedinInputData the input data
+     * @param loginInputData the input data
      */
-    void execute(SignupInputData signupInputData);
+    void execute(LoggedInInputData loggedinInputData, LoginInputData loginInputData);
 
     /**
-     * Executes the switch to login view use case.
+     * Executes the switch to Get Receipt view use case.
      */
-    void switchToLoginView();
+    void switchToGetReceiptView();
 }

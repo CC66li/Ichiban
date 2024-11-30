@@ -16,4 +16,9 @@ public interface GetReceipeOutputBoundary {
      * @param errorMessage the explanation of the failure
      */
     void prepareFailView(String errorMessage);
+
+    /**
+     * Executes the switch to receipt generator view use case.
+     */
+    void switchToReceiptView();
 }

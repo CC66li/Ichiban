@@ -216,7 +216,8 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
                                 currentState.getHeight(),
                                 currentState.getWeight(),
                                 currentState.getGender(),
-                                currentState.getAge()
+                                currentState.getAge(),
+                                null, null, null, null
                         );
                     }
                 }
@@ -435,7 +436,10 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
             final LoggedInState state = (LoggedInState) evt.getNewValue();
             JOptionPane.showMessageDialog(null, "password updated for " + state.getUsername());
         }
-
+        else if (evt.getPropertyName().equals("weight")) {
+            final LoggedInState state = (LoggedInState) evt.getNewValue();
+            JOptionPane.showMessageDialog(null, "weight updated for " + state.getUsername());
+        }
     }
 
     public String getViewName() {
