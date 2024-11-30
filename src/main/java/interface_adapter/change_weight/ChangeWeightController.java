@@ -19,7 +19,7 @@ public class ChangeWeightController {
      * @param weight the new weight
      * @param username the user whose weight to change
      */
-    public void execute(String password, String username, float height, float weight,
+    public void execute(String username,String password, float height, float weight,
                         String gender, int age, String mealType, String cuisineType, String allergy,
                         String[] ingredient) {
         final ChangeWeightInputData changeWeightInputData = new ChangeWeightInputData(username, password,
