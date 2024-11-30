@@ -17,15 +17,18 @@ public class LoggedInState {
     private String cuisineType;
     private String[] ingredient;
 
-    //public LoggedInState(LoggedInState copy) {
-    //    username = copy.username;
-    //    password = copy.password;
-    //    height = copy.height;
-    //    weight = copy.weight;
-    //    gender = copy.gender;
-    //    age = copy.age;
-    //    passwordError = copy.passwordError;
-    //}
+    public LoggedInState(LoggedInState copy) {
+        username = copy.username;
+        password = copy.password;
+        height = copy.height;
+        weight = copy.weight;
+        gender = copy.gender;
+        age = copy.age;
+        passwordError = copy.passwordError;
+    }
+
+    // default
+    public LoggedInState(){}
 
     public String getUsername() {
         return username;
