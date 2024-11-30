@@ -22,4 +22,11 @@ public class LogoutController {
         final LogoutInputData inputDate = new LogoutInputData(username);
         logoutUseCaseInteractor.execute(inputDate);
     }
+
+    /**
+     * Executes the "switch to LoginView" Use Case.
+     */
+    public void switchToLoginView() {
+        logoutUseCaseInteractor.switchToLoginView();
+    }
 }
