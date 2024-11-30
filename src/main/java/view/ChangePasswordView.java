@@ -105,7 +105,7 @@ public class ChangePasswordView extends JPanel implements PropertyChangeListener
                                 currentState.getHeight(),
                                 currentState.getWeight(),
                                 currentState.getGender(),
-                                currentState.getAge()
+                                currentState.getAge(), null, null, null, null
                         );
                     }
                 }
