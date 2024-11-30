@@ -29,7 +29,9 @@ public class LoggedInInteractor implements LoggedInInputBoundary {
                 loggedinInputData.getAllergy(), loggedinInputData.getIngredient());
         userDataAccessObject.save(user);
 
-        final LoggedInOutputData loggedInOutputData = new LoggedInOutputData(user.getName(), false);
+        final LoggedInOutputData loggedInOutputData = new LoggedInOutputData(user.getName(), user.getPassword(),
+                user.getHeight(), user.getWeight(), user.getGender(), user.getAge(),
+                user.getMealType(), user.getCuisineType(), user.getAllergy(), user.getIngredient(), false);
         userPresenter.prepareSuccessView(loggedInOutputData);
     }
 

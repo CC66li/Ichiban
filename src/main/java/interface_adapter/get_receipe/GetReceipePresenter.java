@@ -8,6 +8,7 @@ import use_case.get_receipe.GetReceipeInputBoundary;
 import use_case.get_receipe.GetReceipeInputData;
 import use_case.get_receipe.GetReceipeOutputBoundary;
 import use_case.get_receipe.GetReceipeOutputData;
+import use_case.logged_in.LoggedInOutputData;
 
 
 /**
@@ -31,7 +32,7 @@ public class GetReceipePresenter implements GetReceipeOutputBoundary {
     @Override
     public void prepareSuccessView(GetReceipeOutputData outputData) {
         final GetReceipeState getReceipeState = getReceipeViewModel.getState();
-        getReceipeState.setHeight(outputData.);
+        getReceipeState.setHeight(outputData);
         getReceipeState.setWeight();
         getReceipeState.setAge();
         getReceipeState.setGender();
