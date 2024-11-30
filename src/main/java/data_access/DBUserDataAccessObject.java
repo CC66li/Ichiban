@@ -16,6 +16,7 @@ import use_case.change_password.ChangePasswordUserDataAccessInterface;
 import use_case.change_weight.ChangeWeightUserDataAccessInterface;
 import use_case.get_receipe.GetReceipeInputData;
 import use_case.get_receipe.GetReceipeUserDataAccessInterface;
+import use_case.logged_in.LoggedInUserDataAccessInterface;
 import use_case.login.LoginUserDataAccessInterface;
 import use_case.logout.LogoutUserDataAccessInterface;
 import use_case.signup.SignupUserDataAccessInterface;
@@ -28,7 +29,8 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         ChangePasswordUserDataAccessInterface,
         ChangeWeightUserDataAccessInterface,
         LogoutUserDataAccessInterface,
-        GetReceipeUserDataAccessInterface {
+        GetReceipeUserDataAccessInterface,
+        LoggedInUserDataAccessInterface {
     private static final int SUCCESS_CODE = 200;
     private static final String CONTENT_TYPE_LABEL = "Content-Type";
     private static final String CONTENT_TYPE_JSON = "application/json";

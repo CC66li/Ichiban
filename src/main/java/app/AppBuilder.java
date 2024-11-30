@@ -14,8 +14,12 @@ import interface_adapter.change_password.ChangePasswordController;
 import interface_adapter.change_password.ChangePasswordPresenter;
 import interface_adapter.change_password.LoggedInViewModel;
 import interface_adapter.change_weight.ChangeWeightController;
+import interface_adapter.change_weight.ChangeWeightPresenter;
+import interface_adapter.get_receipe.GetReceipeController;
 import interface_adapter.get_receipe.GetReceipePresenter;
 import interface_adapter.get_receipe.GetReceipeViewModel;
+import interface_adapter.logged_in.LoggedInController;
+import interface_adapter.logged_in.LoggedInPresenter;
 import interface_adapter.login.LoginController;
 import interface_adapter.login.LoginPresenter;
 import interface_adapter.login.LoginViewModel;
@@ -27,8 +31,15 @@ import interface_adapter.signup.SignupViewModel;
 import use_case.change_password.ChangePasswordInputBoundary;
 import use_case.change_password.ChangePasswordInteractor;
 import use_case.change_password.ChangePasswordOutputBoundary;
+import use_case.change_weight.ChangeWeightInputBoundary;
+import use_case.change_weight.ChangeWeightInteractor;
+import use_case.change_weight.ChangeWeightOutputBoundary;
+import use_case.get_receipe.GetReceipeInputBoundary;
+import use_case.get_receipe.GetReceipeInteractor;
 import use_case.get_receipe.GetReceipeOutputBoundary;
+import use_case.logged_in.*;
 import use_case.login.LoginInputBoundary;
+import use_case.login.LoginInputData;
 import use_case.login.LoginInteractor;
 import use_case.login.LoginOutputBoundary;
 import use_case.logout.LogoutInputBoundary;
@@ -37,6 +48,7 @@ import use_case.logout.LogoutOutputBoundary;
 import use_case.signup.SignupInputBoundary;
 import use_case.signup.SignupInteractor;
 import use_case.signup.SignupOutputBoundary;
+import use_case.logged_in.LoggedInOutputBoundary;
 import view.*;
 
 /**
@@ -67,6 +79,7 @@ public class AppBuilder {
     private LoggedInViewModel loggedInViewModel;
     private LoggedInView loggedInView;
     private LoginView loginView;
+    private GetReceipeViewModel getReceipeViewModel;
     private InputIngredientView inputIngredientView;
 
     public AppBuilder() {
@@ -137,6 +150,22 @@ public class AppBuilder {
     }
 
     /**
+     * Adds the Change Weight Use Case to the application.
+     * @return this builder
+     */
+    public AppBuilder addChangeWeightUseCase() {
+        final ChangeWeightOutputBoundary changeWeightOutputBoundary =
+                new ChangeWeightPresenter(loggedInViewModel);
+
+        final ChangeWeightInputBoundary changeWeightInteractor =
+                new ChangeWeightInteractor(userDataAccessObject, changeWeightOutputBoundary, userFactory);
+
+        final ChangeWeightController changeWeightController =
+                new ChangeWeightController(changeWeightInteractor);
+        loggedInView.setChangeWeightController(changeWeightController);
+        return this;
+    }
+    /**
      * Adds the Change Password Use Case to the application.
      * @return this builder
      */
@@ -154,6 +183,40 @@ public class AppBuilder {
     }
 
     /**
+     * Adds the GetReceipt Use Case to the application.
+     * @return this builder
+     */
+    public AppBuilder addGetReceiptUseCase() {
+        final GetReceipeOutputBoundary getReceipeOutputBoundary = new GetReceipePresenter(viewManagerModel,
+                getReceipeViewModel, loginViewModel);
+
+        final GetReceipeInputBoundary getReceipeInteractor =
+                new GetReceipeInteractor(userDataAccessObject, getReceipeOutputBoundary, userFactory);
+
+        final GetReceipeController getReceipeController =
+                new GetReceipeController(getReceipeInteractor);
+
+        inputIngredientView.setGetReceipeController(getReceipeController);
+        return this;
+    }
+
+    /**
+     * Adds the LoggedIn Use Case to the application.
+     * @return this builder
+     */
+    public AppBuilder addLoggedInUseCase() {
+        final LoggedInOutputBoundary loggedInOutputBoundary =
+                new LoggedInPresenter(loggedInViewModel, getReceipeViewModel, viewManagerModel);
+
+        final LoggedInInputBoundary loggedInInteractor =
+                new LoggedInInteractor(userDataAccessObject, loggedInOutputBoundary, userFactory);
+
+        final LoggedInController loggedInController = new LoggedInController(loggedInInteractor);
+        loggedInView.setLoggedInController(loggedInController);
+        return this;
+    }
+
+    /**
      * Adds the Logout Use Case to the application.
      * @return this builder
      */
@@ -167,15 +230,6 @@ public class AppBuilder {
         final LogoutController logoutController = new LogoutController(logoutInteractor);
         loggedInView.setLogoutController(logoutController);
         return this;
-    }
-
-    /**
-     * Adds the GetReceipt Use Case to the application.
-     * @return this builder
-     */
-    public AppBuilder addGetReceiptUseCase() {
-        final GetReceipeOutputBoundary getReceipeOutputBoundary = new GetReceipePresenter(viewManagerModel,
-                GetReceipeViewModel, loginViewModel);
     }
 
     /**
