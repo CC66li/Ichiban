@@ -3,6 +3,7 @@ package interface_adapter.get_receipe;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.change_password.LoggedInState;
 
+import interface_adapter.login.LoginState;
 import interface_adapter.login.LoginViewModel;
 import use_case.get_receipe.GetReceipeInputBoundary;
 import use_case.get_receipe.GetReceipeInputData;
@@ -31,15 +32,14 @@ public class GetReceipePresenter implements GetReceipeOutputBoundary {
 
     @Override
     public void prepareSuccessView(GetReceipeOutputData outputData) {
-        final GetReceipeState getReceipeState = getReceipeViewModel.getState();
-        getReceipeState.setHeight(outputData);
-        getReceipeState.setWeight();
-        getReceipeState.setAge();
-        getReceipeState.setGender();
-        getReceipeState.setMealType();
-        getReceipeState.setCuisineType();
-        getReceipeState.setAllergy();
-        getReceipeState.setIngredient();
+        // on success, switch to login view.
+        final LoginState loginState = loginViewModel.getState();
+        loginState.setUsername(outputData.getUsername());
+        this.loginViewModel.setState(loginState);
+        loginViewModel.firePropertyChanged();
+
+        viewManagerModel.setState(loginViewModel.getViewName());
+        viewManagerModel.firePropertyChanged();
     }
 
     @Override

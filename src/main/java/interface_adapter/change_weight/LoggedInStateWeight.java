@@ -1,5 +1,7 @@
 package interface_adapter.change_weight;
 
+import interface_adapter.change_weight.LoggedInStateWeight;
+
 /**
  * The State information representing the logged-in user.
  */
@@ -11,16 +13,24 @@ public class LoggedInStateWeight {
     private float weight = 0;
     private String gender = "";
     private int age = 0;
+    private String passwordError;
+    private String mealType;
+    private String allergy;
+    private String cuisineType;
+    private String[] ingredient;
 
-//    public LoggedInState(LoggedInState copy) {
-//        username = copy.username;
-//        password = copy.password;
-//        height = copy.height;
-//        weight = copy.weight;
-//        gender = copy.gender;
-//        age = copy.age;
-//        passwordError = copy.passwordError;
-//    }
+    public LoggedInStateWeight(LoggedInStateWeight copy) {
+        username = copy.username;
+        password = copy.password;
+        height = copy.height;
+        weight = copy.weight;
+        gender = copy.gender;
+        age = copy.age;
+        passwordError = copy.passwordError;
+    }
+
+    // default
+    public LoggedInStateWeight() {}
 
 
     public String getUsername() {

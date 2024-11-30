@@ -11,8 +11,8 @@ public class GetReceipeController {
 
     private final GetReceipeInputBoundary getReceipeInputBoundary;
 
-    public GetReceipeController(GetReceipeInputBoundary getReceipeInputBoundary) {
-        this.getReceipeInputBoundary = getReceipeInputBoundary;
+    public GetReceipeController(GetReceipeInputBoundary getReceipeInputInteractor) {
+        this.getReceipeInputBoundary = getReceipeInputInteractor;
     }
 
     /**

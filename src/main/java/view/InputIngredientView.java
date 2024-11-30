@@ -1,5 +1,7 @@
 package view;
 
+import interface_adapter.get_receipe.GetReceipeController;
+
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,6 +19,10 @@ public class InputIngredientView extends JPanel implements PropertyChangeListene
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
+
+    }
+
+    public setGetReceipeController(GetReceipeController getReceipeController) {
 
     }
 }

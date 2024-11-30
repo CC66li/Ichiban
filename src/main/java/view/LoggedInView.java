@@ -16,6 +16,7 @@ import interface_adapter.change_weight.ChangeWeightController;
 import interface_adapter.change_password.ChangePasswordController;
 import interface_adapter.get_receipe.GetReceipeController;
 import interface_adapter.get_receipe.GetReceipeViewModel;
+import interface_adapter.logged_in.LoggedInController;
 import interface_adapter.logout.LogoutController;
 
 /**
@@ -27,6 +28,7 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
     private final LoggedInViewModel loggedInViewModel;
     private ChangeWeightController changeWeightController;
     private ChangePasswordController changePasswordController;
+    private LoggedInController loggedInController;
     private final JTextField ingredientField = new JTextField(150);
     private final JRadioButton breakButton = new JRadioButton("Breakfast");
     private final JRadioButton lunchButton = new JRadioButton("Lunch");
@@ -453,6 +455,10 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
     public void setLogoutController(LogoutController logoutController) {
         // save the logout controller in the instance variable.
         this.logoutController = logoutController;
+    }
+
+    public void setLoggedInController(LoggedInController loggedInController) {
+        this.loggedInController = loggedInController;
     }
 
     public void setChangePasswordController(ChangePasswordController changePasswordController) {

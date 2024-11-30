@@ -20,8 +20,8 @@ public class Main {
                                             .addLoginUseCase()
                                             .addLogoutUseCase()
                                             .addChangePasswordUseCase()
-                                            .addLogoutUseCase()
-
+                                            .addLoggedInUseCase()
+                                            .addChangeWeightUseCase()
                                             .addGetReceiptUseCase()
                                             .build();
 

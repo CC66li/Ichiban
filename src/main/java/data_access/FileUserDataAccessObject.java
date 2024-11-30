@@ -15,6 +15,7 @@ import entity.UserFactory;
 import use_case.change_password.ChangePasswordUserDataAccessInterface;
 import use_case.change_weight.ChangeWeightUserDataAccessInterface;
 import use_case.get_receipe.GetReceipeUserDataAccessInterface;
+import use_case.logged_in.LoggedInUserDataAccessInterface;
 import use_case.login.LoginUserDataAccessInterface;
 import use_case.signup.SignupUserDataAccessInterface;
 
@@ -25,7 +26,8 @@ public class FileUserDataAccessObject implements SignupUserDataAccessInterface,
                                                  LoginUserDataAccessInterface,
                                                  ChangeWeightUserDataAccessInterface,
                                                  ChangePasswordUserDataAccessInterface,
-                                                 GetReceipeUserDataAccessInterface {
+                                                 GetReceipeUserDataAccessInterface,
+                                                 LoggedInUserDataAccessInterface {
 
     private static final String HEADER = "username,password, weight, height, gender, age, mealType, cuisineType, allergy, ingredient";
 
