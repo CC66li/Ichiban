@@ -14,6 +14,7 @@ import interface_adapter.change_password.ChangePasswordController;
 import interface_adapter.change_password.ChangePasswordPresenter;
 import interface_adapter.change_password.LoggedInViewModel;
 import interface_adapter.change_weight.ChangeWeightController;
+import interface_adapter.get_receipe.GetReceipePresenter;
 import interface_adapter.get_receipe.GetReceipeViewModel;
 import interface_adapter.login.LoginController;
 import interface_adapter.login.LoginPresenter;

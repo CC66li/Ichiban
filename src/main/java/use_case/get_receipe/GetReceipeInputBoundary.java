@@ -15,4 +15,9 @@ public interface GetReceipeInputBoundary {
      */
     void execute(GetReceipeInputData getReceipeInputData, LoginInputData loginInputData);
 
+    /**
+     * Executes the switch to receipt generator view use case.
+     */
+    void switchToReceiptView();
+
 }
