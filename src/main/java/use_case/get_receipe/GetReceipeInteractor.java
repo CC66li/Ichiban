@@ -3,6 +3,7 @@ package use_case.get_receipe;
 import entity.User;
 import entity.UserFactory;
 import org.json.JSONArray;
+import use_case.logged_in.LoggedInInputData;
 import use_case.login.LoginInputData;
 
 
@@ -23,10 +24,10 @@ public class GetReceipeInteractor implements GetReceipeInputBoundary {
     }
 
     @Override
-    public JSONArray execute(GetReceipeInputData getReceipeInputData, LoginInputData loginInputData) {
+    public JSONArray execute(GetReceipeInputData getReceipeInputData, LoginInputData logInInputData) {
         final User user = userFactory.create(
-                loginInputData.getUsername(),
-                loginInputData.getPassword(),
+                logInInputData.getUsername(),
+                logInInputData.getPassword(),
                 getReceipeInputData.getHeight(),
                 getReceipeInputData.getWeight(),
                 getReceipeInputData.getGender(),
