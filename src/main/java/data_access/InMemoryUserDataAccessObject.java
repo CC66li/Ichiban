@@ -71,7 +71,6 @@ public class InMemoryUserDataAccessObject implements SignupUserDataAccessInterfa
     public JSONArray getReceipe(User user) {
         final OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
-
         GetReceipeInputData getReceipeInputData = new GetReceipeInputData(user.getHeight(),
                 user.getWeight(),
                 user.getGender(),
@@ -95,7 +94,6 @@ public class InMemoryUserDataAccessObject implements SignupUserDataAccessInterfa
             requestUrl += "&cuisineType=" + user.getCuisineType();
         }
         requestUrl += "&calories=0-" + getReceipeInputData.getBMR();
-
 
         final Request request = new Request.Builder()
                 .url(requestUrl)
