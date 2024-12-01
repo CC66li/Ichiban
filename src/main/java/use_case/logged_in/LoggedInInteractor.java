@@ -36,7 +36,7 @@ public class LoggedInInteractor implements LoggedInInputBoundary {
     }
 
     @Override
-    public void switchToGetReceiptView() {
-        userPresenter.switchToGetReceiptView();
+    public void switchToInputIngredientView() {
+        userPresenter.switchToInputIngredientView();
     }
 }

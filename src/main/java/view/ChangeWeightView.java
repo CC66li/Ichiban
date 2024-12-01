@@ -33,6 +33,7 @@ public class ChangeWeightView extends JPanel implements PropertyChangeListener {
     private JLabel username;
 
     private JButton logOut;
+    private JButton cancel;
 
     private final JTextField weightInputField = new JTextField(15);
     private JButton changeWeight;
@@ -62,6 +63,9 @@ public class ChangeWeightView extends JPanel implements PropertyChangeListener {
         final JPanel buttons = new JPanel();
         logOut = new JButton("Log Out");
         buttons.add(logOut);
+
+        cancel = new JButton("Cancel");
+        buttons.add(cancel);
 
         changeWeight = new JButton("Change Weight");
         buttons.add(changeWeight);
@@ -116,12 +120,29 @@ public class ChangeWeightView extends JPanel implements PropertyChangeListener {
         );
 
         logOut.addActionListener(
-                // This creates an anonymous subclass of ActionListener and instantiates it.
                 evt -> {
                     if (evt.getSource().equals(logOut)) {
-                        // execute the logout use case through the Controller
-                        // 1. get the state out of the loggedInViewModel. It contains the username.
-                        // 2. Execute the logout Controller.
+                        // Call switchToLoginView only if logoutController is set
+                        if (this.logoutController != null) {
+                            this.logoutController.switchToLoginView();
+                        }
+                        else {
+                            System.out.println("LogoutController is not initialized.");
+                        }
+                    }
+                }
+        );
+
+        cancel.addActionListener(
+                evt -> {
+                    if (evt.getSource().equals(logOut)) {
+                        // Call switchToLoginView only if logoutController is set
+                        if (this.logoutController != null) {
+                            this.logoutController.switchToLoginView();
+                        }
+                        else {
+                            System.out.println("LogoutController is not initialized.");
+                        }
                     }
                 }
         );

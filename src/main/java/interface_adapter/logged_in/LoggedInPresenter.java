@@ -52,7 +52,7 @@ public class LoggedInPresenter implements LoggedInOutputBoundary{
     }
 
     @Override
-    public void switchToGetReceiptView() {
+    public void switchToInputIngredientView() {
         viewManagerModel.setState(getReceipeViewModel.getViewName());
         viewManagerModel.firePropertyChanged();
     }
