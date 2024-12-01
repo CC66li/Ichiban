@@ -56,9 +56,9 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
     private final UserFactory userFactory;
 
     public DBUserDataAccessObject(UserFactory userFactory) {
+
         this.userFactory = userFactory;
     }
-
     @Override
     public User get(String username) {
         // Make an API call to get the user object.
