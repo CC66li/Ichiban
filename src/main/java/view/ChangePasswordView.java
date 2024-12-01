@@ -11,11 +11,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import interface_adapter.change_password.*;
-import interface_adapter.change_weight.ChangeWeightController;
-import interface_adapter.login.LoginState;
 import interface_adapter.logout.LogoutController;
-import interface_adapter.signup.SignupState;
-import interface_adapter.signup.SignupViewModel;
 
 /**
  * The View for when the user want to change password.

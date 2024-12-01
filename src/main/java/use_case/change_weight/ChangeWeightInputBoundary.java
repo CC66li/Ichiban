@@ -13,4 +13,8 @@ public interface ChangeWeightInputBoundary {
      */
     void execute(ChangeWeightInputData changeWeightInputData, GetReceipeInputData getReceipeInputData);
 
+    /**
+     * Executes the switch to change weight view use case.
+     */
+    void switchToChangeWeightView();
 }

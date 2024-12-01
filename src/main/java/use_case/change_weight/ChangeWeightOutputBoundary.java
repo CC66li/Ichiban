@@ -16,4 +16,9 @@ public interface ChangeWeightOutputBoundary {
      * @param errorMessage the explanation of the failure
      */
     void prepareFailView(String errorMessage);
+
+    /**
+     * Switches to the ChangeWeight View.
+     */
+    void switchToChangeWeightView();
 }
