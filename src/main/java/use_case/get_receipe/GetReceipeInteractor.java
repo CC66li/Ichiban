@@ -2,7 +2,9 @@ package use_case.get_receipe;
 
 import entity.User;
 import entity.UserFactory;
+import org.json.JSONArray;
 import use_case.login.LoginInputData;
+
 
 /**
  * The Get Receipe Interactor.
@@ -21,7 +23,7 @@ public class GetReceipeInteractor implements GetReceipeInputBoundary {
     }
 
     @Override
-    public void execute(GetReceipeInputData getReceipeInputData, LoginInputData loginInputData) {
+    public JSONArray execute(GetReceipeInputData getReceipeInputData, LoginInputData loginInputData) {
         final User user = userFactory.create(
                 loginInputData.getUsername(),
                 loginInputData.getPassword(),
@@ -33,11 +35,12 @@ public class GetReceipeInteractor implements GetReceipeInputBoundary {
                 getReceipeInputData.getCuisineType(),
                 getReceipeInputData.getAllergy(),
                 getReceipeInputData.getIngredient());
-        userDataAccessObject.getReceipe(user);
 
         final GetReceipeOutputData getReceipeOutputData = new GetReceipeOutputData(user.getName(),
-                                                                                  false);
+                false);
         userPresenter.prepareSuccessView(getReceipeOutputData);
+
+        return userDataAccessObject.getReceipe(user);
     }
 
     @Override

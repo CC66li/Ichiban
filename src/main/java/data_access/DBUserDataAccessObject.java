@@ -1,7 +1,12 @@
 package data_access;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -51,9 +56,9 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
     private final UserFactory userFactory;
 
     public DBUserDataAccessObject(UserFactory userFactory) {
+
         this.userFactory = userFactory;
     }
-
     @Override
     public User get(String username) {
         // Make an API call to get the user object.
@@ -220,21 +225,21 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
     }
 
     @Override
-    public void getReceipe(User user) {
+    public JSONArray getReceipe(User user) {
         final OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
 
         GetReceipeInputData getReceipeInputData = new GetReceipeInputData(user.getHeight(),
-                                                                          user.getWeight(),
-                                                                          user.getGender(),
-                                                                          user.getAge(),
-                                                                          user.getMealType(),
-                                                                          user.getCuisineType(),
-                                                                          user.getAllergy(),
-                                                                          user.getIngredient());
+                user.getWeight(),
+                user.getGender(),
+                user.getAge(),
+                user.getMealType(),
+                user.getCuisineType(),
+                user.getAllergy(),
+                user.getIngredient());
 
         // According to the input get the url
-        String requestUrl = "https://api.edamam.com/api/recipes/v2?type=public&app_id=<%s>&app_key=<%s>";
+        String requestUrl = "https://api.edamam.com/api/recipes/v2?type=public&app_id=<ff136c6d>&app_key=<009e6cd694e4752490ac362dc7d>";
         if (user.getIngredient() != null){
             for (String item: user.getIngredient()){
                 requestUrl += "&q=" + item;
@@ -250,7 +255,7 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
 
 
         final Request request = new Request.Builder()
-                .url(String.format(requestUrl, user.getName(), user.getPassword()))
+                .url(requestUrl)
                 .method("GET", null)
                 .addHeader(CONTENT_TYPE_LABEL, CONTENT_TYPE_JSON)
                 .build();
@@ -260,7 +265,7 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
             final JSONObject responseBody = new JSONObject(response.body().string());
 
             if (responseBody.getInt(STATUS_CODE_LABEL) == SUCCESS_CODE) {
-                //success
+                return responseBody.getJSONArray("hits");
             }
             else {
                 throw new RuntimeException(responseBody.getString(MESSAGE));

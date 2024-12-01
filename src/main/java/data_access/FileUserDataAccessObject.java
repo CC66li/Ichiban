@@ -22,12 +22,12 @@ import use_case.signup.SignupUserDataAccessInterface;
 /**
  * DAO for user data implemented using a File to persist the data.
  */
+
 public class FileUserDataAccessObject implements SignupUserDataAccessInterface,
-                                                 LoginUserDataAccessInterface,
-                                                 ChangeWeightUserDataAccessInterface,
-                                                 ChangePasswordUserDataAccessInterface,
-                                                 GetReceipeUserDataAccessInterface,
-                                                 LoggedInUserDataAccessInterface {
+        LoginUserDataAccessInterface,
+        ChangeWeightUserDataAccessInterface,
+        ChangePasswordUserDataAccessInterface,
+        LoggedInUserDataAccessInterface {
 
     private static final String HEADER = "username,password, weight, height, gender, age, mealType, cuisineType, allergy, ingredient";
 
@@ -54,14 +54,11 @@ public class FileUserDataAccessObject implements SignupUserDataAccessInterface,
             save();
         }
         else {
-
             try (BufferedReader reader = new BufferedReader(new FileReader(csvFile))) {
                 final String header = reader.readLine();
-
                 if (!header.equals(HEADER)) {
                     throw new RuntimeException(String.format("header should be%n: %s%but was:%n%s", HEADER, header));
                 }
-
                 String row;
                 while ((row = reader.readLine()) != null) {
                     final String[] col = row.split(",");
@@ -75,9 +72,7 @@ public class FileUserDataAccessObject implements SignupUserDataAccessInterface,
                     final String cuisineType = String.valueOf(col[headers.get("cuisineType")]);
                     final String allergy = String.valueOf(col[headers.get("allergy")]);
                     final String ingredient = String.valueOf(col[headers.get("ingredient")]);
-
                     String[] listIngredient = ingredient.split(",");
-
                     final User user = userFactory.create(username, password, Float.parseFloat(height),
                             Float.parseFloat(weight), gender, Integer.parseInt(age),
                             mealType, cuisineType, allergy, listIngredient);
@@ -93,7 +88,6 @@ public class FileUserDataAccessObject implements SignupUserDataAccessInterface,
             writer = new BufferedWriter(new FileWriter(csvFile));
             writer.write(String.join(",", headers.keySet()));
             writer.newLine();
-
             for (User user : accounts.values()) {
                 final String line = String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s",
                         user.getName(), user.getPassword(), user.getWeight(),
@@ -103,9 +97,7 @@ public class FileUserDataAccessObject implements SignupUserDataAccessInterface,
                 writer.write(line);
                 writer.newLine();
             }
-
             writer.close();
-
         }
         catch (IOException ex) {
             throw new RuntimeException(ex);
@@ -149,10 +141,5 @@ public class FileUserDataAccessObject implements SignupUserDataAccessInterface,
     public void changeWeight(User user) {
         accounts.put(user.getName(), user);
         save();
-    }
-
-    @Override
-    public void getReceipe(User user) {
-        // No need to save data..?
     }
 }
