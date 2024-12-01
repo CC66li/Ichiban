@@ -38,4 +38,9 @@ public class ChangeWeightInteractor implements ChangeWeightInputBoundary {
                                                                                   false);
         userPresenter.prepareSuccessView(changeWeightOutputData);
     }
+
+    @Override
+    public void switchToChangeWeightView() {
+        userPresenter.switchToChangeWeightView();
+    }
 }

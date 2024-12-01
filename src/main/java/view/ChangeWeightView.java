@@ -1,6 +1,8 @@
 package view;
 
 import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -14,9 +16,9 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import interface_adapter.change_password.LoggedInState;
-import interface_adapter.change_password.LoggedInViewModel;
 import interface_adapter.change_weight.ChangeWeightController;
-import interface_adapter.change_password.ChangePasswordController;
+import interface_adapter.change_weight.ChangeWeightState;
+import interface_adapter.change_weight.ChangeWeightViewModel;
 import interface_adapter.logout.LogoutController;
 
 /**
@@ -24,60 +26,81 @@ import interface_adapter.logout.LogoutController;
  */
 public class ChangeWeightView extends JPanel implements PropertyChangeListener {
 
-    private final String viewName = "logged in";
-    private LoggedInViewModel loggedInViewModel;
+    private final String viewName = "change weight";
+
+    private final ChangeWeightViewModel changeWeightViewModel;
     private final JLabel passwordErrorField = new JLabel();
     private ChangeWeightController changeWeightController;
     private LogoutController logoutController;
 
-    private JLabel username;
-
-    private JButton logOut;
+    private JButton confirm;
     private JButton cancel;
+    private final JLabel username;
 
     private final JTextField weightInputField = new JTextField(15);
-    private JButton changeWeight;
 
-    public ChangeWeightView(LoggedInViewModel loggedInViewModel, JLabel username,
-                           JButton logOut, JButton changeWeight) {
-        this.loggedInViewModel = loggedInViewModel;
-        this.username = username;
-        this.logOut = logOut;
-        this.changeWeight = changeWeight;
-    }
-
-    public void LoggedInView(LoggedInViewModel loggedInViewModel) {
-        this.loggedInViewModel = loggedInViewModel;
-        this.loggedInViewModel.addPropertyChangeListener(this);
-
-        final JLabel title = new JLabel("Logged In Screen");
-        title.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        final LabelTextPanel passwordInfo = new LabelTextPanel(
-                new JLabel("New Weight"), weightInputField);
+    public ChangeWeightView(ChangeWeightViewModel changeWeightViewModel) {
+        this.changeWeightViewModel = changeWeightViewModel;
+        this.changeWeightViewModel.addPropertyChangeListener(this);
 
         final JLabel usernameInfo = new JLabel("Currently logged in: ");
-        usernameInfo.setAlignmentX(Component.CENTER_ALIGNMENT);
         username = new JLabel();
+        usernameInfo.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        final JLabel title = new JLabel("Change Weight");
+        title.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        final LabelTextPanel weightInfo = new LabelTextPanel(new JLabel("New Weight"), weightInputField);
 
         final JPanel buttons = new JPanel();
-        logOut = new JButton("Log Out");
-        buttons.add(logOut);
-
+        confirm = new JButton("Confirm");
+        buttons.add(confirm);
         cancel = new JButton("Cancel");
         buttons.add(cancel);
 
-        changeWeight = new JButton("Change Weight");
-        buttons.add(changeWeight);
+        confirm.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent evt) {
+                        if (evt.getSource().equals(confirm)) {
+                            final ChangeWeightState currentState = changeWeightViewModel.getState();
+
+                            changeWeightController.execute(
+                                    currentState.getUsername(),
+                                    currentState.getPassword(),
+                                    currentState.getHeight(),
+                                    currentState.getWeight(),
+                                    currentState.getGender(),
+                                    currentState.getAge(),
+                                    currentState.getMealType(),
+                                    currentState.getCuisineType(),
+                                    currentState.getAllergy(),
+                                    currentState.getIngredient()
+                            );
+                        }
+                    }
+                }
+        );
+
+        cancel.addActionListener(
+                evt -> {
+                    if (evt.getSource().equals(cancel)) {
+                        // Call switchToLoginView only if logoutController is set
+                        if (this.logoutController != null) {
+                            this.logoutController.switchToLoginView();
+                        } else {
+                            System.out.println("LogoutController is not initialized.");
+                        }
+                    }
+                }
+        );
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         weightInputField.getDocument().addDocumentListener(new DocumentListener() {
-
             private void documentListenerHelper() {
-                final LoggedInState currentState = loggedInViewModel.getState();
-                currentState.setWeight(Float.parseFloat(weightInputField.getText()));
-                loggedInViewModel.setState(currentState);
+                final ChangeWeightState currentState = changeWeightViewModel.getState();
+                currentState.setPassword(weightInputField.getText());
+                changeWeightViewModel.setState(currentState);
             }
 
             @Override
@@ -96,77 +119,17 @@ public class ChangeWeightView extends JPanel implements PropertyChangeListener {
             }
         });
 
-        JButton finalChangeWeight = changeWeight;
-        changeWeight.addActionListener(
-                // This creates an anonymous subclass of ActionListener and instantiates it.
-                evt -> {
-                    if (evt.getSource().equals(finalChangeWeight)) {
-                        final LoggedInState currentState = loggedInViewModel.getState();
-
-                        this.changeWeightController.execute(
-                                currentState.getUsername(),
-                                currentState.getPassword(),
-                                currentState.getHeight(),
-                                currentState.getWeight(),
-                                currentState.getGender(),
-                                currentState.getAge(),
-                                currentState.getMealType(),
-                                currentState.getCuisineType(),
-                                currentState.getAllergy(),
-                                currentState.getIngredient()
-                        );
-                    }
-                }
-        );
-
-        logOut.addActionListener(
-                evt -> {
-                    if (evt.getSource().equals(logOut)) {
-                        // Call switchToLoginView only if logoutController is set
-                        if (this.logoutController != null) {
-                            this.logoutController.switchToLoginView();
-                        }
-                        else {
-                            System.out.println("LogoutController is not initialized.");
-                        }
-                    }
-                }
-        );
-
-        cancel.addActionListener(
-                evt -> {
-                    if (evt.getSource().equals(logOut)) {
-                        // Call switchToLoginView only if logoutController is set
-                        if (this.logoutController != null) {
-                            this.logoutController.switchToLoginView();
-                        }
-                        else {
-                            System.out.println("LogoutController is not initialized.");
-                        }
-                    }
-                }
-        );
+        changeWeightListener();
 
         this.add(title);
         this.add(usernameInfo);
         this.add(username);
 
-        this.add(passwordInfo);
+        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
+        this.add(weightInfo);
         this.add(passwordErrorField);
         this.add(buttons);
-    }
-
-    @Override
-    public void propertyChange(PropertyChangeEvent evt) {
-        if (evt.getPropertyName().equals("state")) {
-            final LoggedInState state = (LoggedInState) evt.getNewValue();
-            username.setText(state.getUsername());
-        }
-        else if (evt.getPropertyName().equals("weight")) {
-            final LoggedInState state = (LoggedInState) evt.getNewValue();
-            JOptionPane.showMessageDialog(null, "weight updated for " + state.getUsername());
-        }
-
     }
 
     public String getViewName() {
@@ -180,5 +143,42 @@ public class ChangeWeightView extends JPanel implements PropertyChangeListener {
     public void setLogoutController(LogoutController logoutController) {
         // save the logout controller in the instance variable.
         this.logoutController = logoutController;
+    }
+
+    private void changeWeightListener() {
+        weightInputField.getDocument().addDocumentListener(new DocumentListener() {
+
+            private void documentListenerHelper() {
+                final ChangeWeightState currentState = changeWeightViewModel.getState();
+                currentState.setUsername(weightInputField.getText());
+                changeWeightViewModel.setState(currentState);
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                documentListenerHelper();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                documentListenerHelper();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                documentListenerHelper();
+            }
+        });
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        if (evt.getPropertyName().equals("state")) {
+            final LoggedInState state = (LoggedInState) evt.getNewValue();
+            username.setText(state.getUsername());
+        } else if (evt.getPropertyName().equals("weight")) {
+            final LoggedInState state = (LoggedInState) evt.getNewValue();
+            JOptionPane.showMessageDialog(null, "weight updated for " + state.getUsername());
+        }
     }
 }

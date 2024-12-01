@@ -13,4 +13,8 @@ public interface ChangePasswordInputBoundary {
      */
     void execute(ChangePasswordInputData changePasswordInputData, GetReceipeInputData getReceipeInputData);
 
+    /**
+     * Executes the switch to Change Password view use case.
+     */
+    void switchToChangePasswordView();
 }

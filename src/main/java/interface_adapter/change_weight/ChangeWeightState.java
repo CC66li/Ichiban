@@ -1,9 +1,9 @@
-package interface_adapter.change_password;
+package interface_adapter.change_weight;
 
 /**
- * The state for the Change Password View Model.
+ * The state for the Change weight View Model.
  */
-public class ChangePasswordState {
+public class ChangeWeightState {
     private String username = "";
     private String password = "";
     private float height = 0;
@@ -16,7 +16,7 @@ public class ChangePasswordState {
     private String cuisineType;
     private String[] ingredient;
 
-    public ChangePasswordState(ChangePasswordState copy) {
+    public ChangeWeightState(ChangeWeightState copy) {
         username = copy.username;
         password = copy.password;
         height = copy.height;
@@ -31,7 +31,7 @@ public class ChangePasswordState {
     }
 
     // default
-    public ChangePasswordState(){}
+    public ChangeWeightState(){}
 
     public String getUsername() {
         return username;
