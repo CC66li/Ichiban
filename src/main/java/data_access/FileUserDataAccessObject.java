@@ -23,11 +23,10 @@ import use_case.signup.SignupUserDataAccessInterface;
  * DAO for user data implemented using a File to persist the data.
  */
 public class FileUserDataAccessObject implements SignupUserDataAccessInterface,
-                                                 LoginUserDataAccessInterface,
-                                                 ChangeWeightUserDataAccessInterface,
-                                                 ChangePasswordUserDataAccessInterface,
-                                                 GetReceipeUserDataAccessInterface,
-                                                 LoggedInUserDataAccessInterface {
+        LoginUserDataAccessInterface,
+        ChangeWeightUserDataAccessInterface,
+        ChangePasswordUserDataAccessInterface,
+        LoggedInUserDataAccessInterface {
 
     private static final String HEADER = "username,password, weight, height, gender, age, mealType, cuisineType, allergy, ingredient";
 
@@ -149,10 +148,5 @@ public class FileUserDataAccessObject implements SignupUserDataAccessInterface,
     public void changeWeight(User user) {
         accounts.put(user.getName(), user);
         save();
-    }
-
-    @Override
-    public void getReceipe(User user) {
-        // No need to save data..?
     }
 }
