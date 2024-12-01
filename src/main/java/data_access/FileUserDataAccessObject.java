@@ -72,9 +72,7 @@ public class FileUserDataAccessObject implements SignupUserDataAccessInterface,
                     final String cuisineType = String.valueOf(col[headers.get("cuisineType")]);
                     final String allergy = String.valueOf(col[headers.get("allergy")]);
                     final String ingredient = String.valueOf(col[headers.get("ingredient")]);
-
                     String[] listIngredient = ingredient.split(",");
-
                     final User user = userFactory.create(username, password, Float.parseFloat(height),
                             Float.parseFloat(weight), gender, Integer.parseInt(age),
                             mealType, cuisineType, allergy, listIngredient);
@@ -90,7 +88,6 @@ public class FileUserDataAccessObject implements SignupUserDataAccessInterface,
             writer = new BufferedWriter(new FileWriter(csvFile));
             writer.write(String.join(",", headers.keySet()));
             writer.newLine();
-
             for (User user : accounts.values()) {
                 final String line = String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s",
                         user.getName(), user.getPassword(), user.getWeight(),
