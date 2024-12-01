@@ -34,7 +34,6 @@ public class GetReceipeController {
         final GetReceipeInputData getReceipeInputData = new GetReceipeInputData(height, weight,
                 gender, age, mealType, cuisineType, allergy, ingredient);
         final LoginInputData loginInputData = new LoginInputData(username, password);
-
         return getReceipeInputBoundary.execute(getReceipeInputData, loginInputData);
     }
 }
