@@ -18,6 +18,7 @@ public class Main {
                                             .addLoggedInView()
                                             .addChangePasswordView()
                                             .addChangeWeightView()
+                                            .addInputIngredientView()
                                             .addSignupUseCase()
                                             .addLoginUseCase()
                                             .addLogoutUseCase()
@@ -26,7 +27,6 @@ public class Main {
                                             .addLoggedInUseCase()
                                             .addChangeWeightUseCase()
                                             .addGetReceiptUseCase()
-                                            .addInputIngredientView()
                                             .build();
 
         application.pack();

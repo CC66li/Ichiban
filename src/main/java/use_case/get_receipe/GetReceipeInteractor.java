@@ -36,6 +36,7 @@ public class GetReceipeInteractor implements GetReceipeInputBoundary {
                 getReceipeInputData.getCuisineType(),
                 getReceipeInputData.getAllergy(),
                 getReceipeInputData.getIngredient());
+        userDataAccessObject.save(user);
 
         final GetReceipeOutputData getReceipeOutputData = new GetReceipeOutputData(user.getName(),
                 false);
@@ -45,7 +46,7 @@ public class GetReceipeInteractor implements GetReceipeInputBoundary {
     }
 
     @Override
-    public void switchToReceiptView() {
-        userPresenter.switchToReceiptView();
+    public void switchToLogInView() {
+        userPresenter.switchToLogInView();
     }
 }

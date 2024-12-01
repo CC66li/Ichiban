@@ -15,4 +15,10 @@ public interface GetReceipeUserDataAccessInterface {
      * @param user the user whose weight is to be updated
      */
     JSONArray getReceipe(User user);
+
+    /**
+     * Saves the user.
+     * @param user the user to save
+     */
+    void save(User user);
 }

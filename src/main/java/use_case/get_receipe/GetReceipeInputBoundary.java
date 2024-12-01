@@ -19,8 +19,7 @@ public interface GetReceipeInputBoundary {
     JSONArray execute(GetReceipeInputData getReceipeInputData, LoginInputData loginInputData);
 
     /**
-     * Executes the switch to receipt generator view use case.
+     * Executes the switch to login view use case.
      */
-    void switchToReceiptView();
-
+    void switchToLogInView();
 }
