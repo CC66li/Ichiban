@@ -185,42 +185,20 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
 //            }
 //        });
 
-        JButton finalChangePassword = changePassword;
         changePassword.addActionListener(
-                // This creates an anonymous subclass of ActionListener and instantiates it.
-                evt -> {
-                    if (evt.getSource().equals(finalChangePassword)) {
-                        final LoggedInState currentState = loggedInViewModel.getState();
-
-                        this.changePasswordController.execute(
-                                currentState.getUsername(),
-                                currentState.getPassword(),
-                                currentState.getHeight(),
-                                currentState.getWeight(),
-                                currentState.getGender(),
-                                currentState.getAge(),
-                                null, null, null, null
-                        );
+                // This would switch to change password view when it acts.
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent evt) {
+                        changePasswordController.switchToChangePasswordView();
                     }
                 }
         );
 
-        JButton finalChangeWeight = changeWeight;
         changeWeight.addActionListener(
-                // This creates an anonymous subclass of ActionListener and instantiates it.
-                evt -> {
-                    if (evt.getSource().equals(finalChangeWeight)) {
-                        final LoggedInState currentState = loggedInViewModel.getState();
-
-                        this.changeWeightController.execute(
-                                currentState.getUsername(),
-                                currentState.getPassword(),
-                                currentState.getHeight(),
-                                currentState.getWeight(),
-                                currentState.getGender(),
-                                currentState.getAge(),
-                                null, null, null, null
-                        );
+                // This would switch to change weight view when it acts.
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent evt) {
+                        changeWeightController.switchToChangeWeightView();
                     }
                 }
         );

@@ -14,5 +14,5 @@ public interface LogoutInputBoundary {
     /**
      * Executes the "switch to LoginView" Use Case.
      */
-    public void switchToLoginView();
+    void switchToLoginView();
 }

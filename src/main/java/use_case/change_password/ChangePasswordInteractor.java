@@ -38,4 +38,9 @@ public class ChangePasswordInteractor implements ChangePasswordInputBoundary {
                                                                                   false);
         userPresenter.prepareSuccessView(changePasswordOutputData);
     }
+
+    @Override
+    public void switchToChangePasswordView() {
+        userPresenter.switchToChangePasswordView();
+    }
 }

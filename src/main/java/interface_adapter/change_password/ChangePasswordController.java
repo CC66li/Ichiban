@@ -29,4 +29,11 @@ public class ChangePasswordController {
 
         userChangePasswordUseCaseInteractor.execute(changePasswordInputData, getReceipeInputData);
     }
+
+    /**
+     * Executes the "switch to ChangePasswordView" Use Case.
+     */
+    public void switchToChangePasswordView() {
+        userChangePasswordUseCaseInteractor.switchToChangePasswordView();
+    }
 }

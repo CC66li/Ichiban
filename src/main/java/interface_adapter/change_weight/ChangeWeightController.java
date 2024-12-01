@@ -29,4 +29,11 @@ public class ChangeWeightController {
 
         userChangeWeightUseCaseInteractor.execute(changeWeightInputData, getReceipeInputData);
     }
+
+    /**
+     * Executes the "switch to ChangeWeightView" Use Case.
+     */
+    public void switchToChangeWeightView() {
+        userChangeWeightUseCaseInteractor.switchToChangeWeightView();
+    }
 }
