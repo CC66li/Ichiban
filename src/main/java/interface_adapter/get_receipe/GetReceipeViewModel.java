@@ -9,12 +9,8 @@ import interface_adapter.login.LoginState;
  */
     public class GetReceipeViewModel extends ViewModel<GetReceipeState> {
 
-    public void GetReipeViewModel() {
-        new GetReceipeViewModel("Receipt Generate");
+    public GetReceipeViewModel() {
+        super("receipt generate");
         setState(new GetReceipeState());
-    }
-
-    public GetReceipeViewModel(String viewName) {
-        super(viewName);
     }
 }
