@@ -12,6 +12,7 @@ import entity.UserFactory;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.change_password.ChangePasswordController;
 import interface_adapter.change_password.ChangePasswordPresenter;
+import interface_adapter.change_password.ChangePasswordViewModel;
 import interface_adapter.change_password.LoggedInViewModel;
 import interface_adapter.change_weight.ChangeWeightController;
 import interface_adapter.change_weight.ChangeWeightPresenter;
@@ -79,6 +80,8 @@ public class AppBuilder {
     private LoggedInViewModel loggedInViewModel;
     private LoggedInView loggedInView;
     private LoginView loginView;
+    private ChangePasswordViewModel changePasswordViewModel;
+    private ChangePasswordView changePasswordView;
     private GetReceipeViewModel getReceipeViewModel;
     private InputIngredientView inputIngredientView;
 
@@ -118,6 +121,18 @@ public class AppBuilder {
         cardPanel.add(loggedInView, loggedInView.getViewName());
         return this;
     }
+
+    /**
+     * Adds the ChangePassword View to the application.
+     * @return this builder
+     */
+    public AppBuilder addChangePasswordView() {
+        changePasswordViewModel = new ChangePasswordViewModel();
+        changePasswordView = new ChangePasswordView(changePasswordViewModel);
+        cardPanel.add(loggedInView, loggedInView.getViewName());
+        return this;
+    }
+
 
     /**
      * Adds the Signup Use Case to the application.
@@ -165,13 +180,14 @@ public class AppBuilder {
         loggedInView.setChangeWeightController(changeWeightController);
         return this;
     }
+
     /**
      * Adds the Change Password Use Case to the application.
      * @return this builder
      */
     public AppBuilder addChangePasswordUseCase() {
         final ChangePasswordOutputBoundary changePasswordOutputBoundary =
-                new ChangePasswordPresenter(loggedInViewModel);
+                new ChangePasswordPresenter(loggedInViewModel, viewManagerModel, changePasswordViewModel);
 
         final ChangePasswordInputBoundary changePasswordInteractor =
                 new ChangePasswordInteractor(userDataAccessObject, changePasswordOutputBoundary, userFactory);
@@ -221,6 +237,22 @@ public class AppBuilder {
      * @return this builder
      */
     public AppBuilder addLogoutUseCase() {
+        final LogoutOutputBoundary logoutOutputBoundary = new LogoutPresenter(viewManagerModel,
+                loggedInViewModel, loginViewModel);
+
+        final LogoutInputBoundary logoutInteractor =
+                new LogoutInteractor(userDataAccessObject, logoutOutputBoundary);
+
+        final LogoutController logoutController = new LogoutController(logoutInteractor);
+        loggedInView.setLogoutController(logoutController);
+        return this;
+    }
+
+    /**
+     * Adds the Logout Use Case to the application.
+     * @return this builder
+     */
+    public AppBuilder addCancelUseCase() {
         final LogoutOutputBoundary logoutOutputBoundary = new LogoutPresenter(viewManagerModel,
                 loggedInViewModel, loginViewModel);
 

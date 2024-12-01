@@ -66,7 +66,7 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
         this.loggedInViewModel = loggedInViewModel;
         this.loggedInViewModel.addPropertyChangeListener(this);
 
-        final JLabel title = new JLabel("Logged In Screen");
+        final JLabel title = new JLabel("Menu");
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         //Set the Types buttons here
@@ -89,8 +89,8 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
         dinnerButton.addActionListener(e -> updateMeal("Dinner"));
 
         final JLabel usernameInfo = new JLabel("Currently logged in: ");
-        usernameInfo.setAlignmentX(Component.CENTER_ALIGNMENT);
         username = new JLabel();
+        usernameInfo.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // Cuisine types chooser
         final JPanel cuisineInfo = new JPanel();
@@ -240,25 +240,9 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
         );
 
         generateReceipt.addActionListener(
-                // This creates an anonymous subclass of ActionListener and instantiates it.
                 new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
-                        if (evt.getSource().equals(generateReceipt)) {
-                            final LoggedInState currentState = loggedInViewModel.getState();
-
-                            getReceipeController.execute(
-                                    currentState.getUsername(),
-                                    currentState.getPassword(),
-                                    currentState.getHeight(),
-                                    currentState.getWeight(),
-                                    currentState.getGender(),
-                                    currentState.getAge(),
-                                    currentState.getMealType(),
-                                    currentState.getCuisineType(),
-                                    currentState.getAllergy(),
-                                    currentState.getIngredient()
-                            );
-                        }
+                        loggedInController.switchToInputIngredientView();
                     }
                 }
         );

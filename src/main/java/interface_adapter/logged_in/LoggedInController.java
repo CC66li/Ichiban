@@ -16,7 +16,7 @@ public class LoggedInController {
     }
 
     /**
-     * Executes the GetReceipt Use Case.
+     * Executes the LoggedIn Use Case.
      * @param username the height of user
      * @param password the height of user
      * @param height the height of user
@@ -35,5 +35,12 @@ public class LoggedInController {
         final LoginInputData loginInputData = new LoginInputData(username, password);
 
         userLoggedinUseCaseInteractor.execute(loggedInputData, loginInputData);
+    }
+
+    /**
+     * Switch to the GetReceipt Use Case.
+     */
+    public void switchToInputIngredientView() {
+        userLoggedinUseCaseInteractor.switchToInputIngredientView();
     }
 }
