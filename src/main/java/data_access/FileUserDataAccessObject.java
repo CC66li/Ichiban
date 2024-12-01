@@ -22,6 +22,7 @@ import use_case.signup.SignupUserDataAccessInterface;
 /**
  * DAO for user data implemented using a File to persist the data.
  */
+
 public class FileUserDataAccessObject implements SignupUserDataAccessInterface,
         LoginUserDataAccessInterface,
         ChangeWeightUserDataAccessInterface,
@@ -53,14 +54,11 @@ public class FileUserDataAccessObject implements SignupUserDataAccessInterface,
             save();
         }
         else {
-
             try (BufferedReader reader = new BufferedReader(new FileReader(csvFile))) {
                 final String header = reader.readLine();
-
                 if (!header.equals(HEADER)) {
                     throw new RuntimeException(String.format("header should be%n: %s%but was:%n%s", HEADER, header));
                 }
-
                 String row;
                 while ((row = reader.readLine()) != null) {
                     final String[] col = row.split(",");
