@@ -16,6 +16,7 @@ import interface_adapter.change_password.ChangePasswordViewModel;
 import interface_adapter.change_password.LoggedInViewModel;
 import interface_adapter.change_weight.ChangeWeightController;
 import interface_adapter.change_weight.ChangeWeightPresenter;
+import interface_adapter.change_weight.ChangeWeightViewModel;
 import interface_adapter.get_receipe.GetReceipeController;
 import interface_adapter.get_receipe.GetReceipePresenter;
 import interface_adapter.get_receipe.GetReceipeViewModel;
@@ -81,6 +82,7 @@ public class AppBuilder {
     private LoggedInView loggedInView;
     private LoginView loginView;
     private ChangePasswordViewModel changePasswordViewModel;
+    private ChangeWeightViewModel changeWeightViewModel;
     private ChangePasswordView changePasswordView;
     private GetReceipeViewModel getReceipeViewModel;
     private InputIngredientView inputIngredientView;
@@ -170,7 +172,7 @@ public class AppBuilder {
      */
     public AppBuilder addChangeWeightUseCase() {
         final ChangeWeightOutputBoundary changeWeightOutputBoundary =
-                new ChangeWeightPresenter(loggedInViewModel);
+                new ChangeWeightPresenter(loggedInViewModel, viewManagerModel, changeWeightViewModel);
 
         final ChangeWeightInputBoundary changeWeightInteractor =
                 new ChangeWeightInteractor(userDataAccessObject, changeWeightOutputBoundary, userFactory);
