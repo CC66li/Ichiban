@@ -17,6 +17,8 @@ public class Main {
                                             .addSignupView()
                                             .addLoggedInView()
                                             .addChangePasswordView()
+                                            .addChangeWeightView()
+                                            .addInputIngredientView()
                                             .addSignupUseCase()
                                             .addLoginUseCase()
                                             .addLogoutUseCase()
