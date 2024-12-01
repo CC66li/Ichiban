@@ -97,9 +97,7 @@ public class FileUserDataAccessObject implements SignupUserDataAccessInterface,
                 writer.write(line);
                 writer.newLine();
             }
-
             writer.close();
-
         }
         catch (IOException ex) {
             throw new RuntimeException(ex);
