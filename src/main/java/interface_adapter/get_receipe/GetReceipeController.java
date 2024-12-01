@@ -36,4 +36,8 @@ public class GetReceipeController {
         final LoginInputData loginInputData = new LoginInputData(username, password);
         return getReceipeInputBoundary.execute(getReceipeInputData, loginInputData);
     }
+
+    public void switchToLogInView() {
+        getReceipeInputBoundary.switchToLogInView();
+    }
 }
