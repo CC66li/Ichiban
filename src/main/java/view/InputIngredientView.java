@@ -99,7 +99,6 @@ public class InputIngredientView extends JPanel implements PropertyChangeListene
     public void propertyChange(PropertyChangeEvent evt) {
     }
 
-
     public void setGetReceipeController(GetReceipeController getReceipeController) {
         this.getReceipeController = getReceipeController;
     }
