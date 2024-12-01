@@ -6,6 +6,7 @@ import interface_adapter.change_password.LoggedInViewModel;
 import interface_adapter.get_receipe.GetReceipeController;
 import interface_adapter.get_receipe.GetReceipeState;
 import interface_adapter.get_receipe.GetReceipeViewModel;
+import interface_adapter.logout.LogoutController;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -29,14 +30,22 @@ import javax.swing.event.DocumentListener;
 public class InputIngredientView extends JPanel implements PropertyChangeListener{
 
     private final String viewName = "receipt generate";
+    private LogoutController logoutController;
     private GetReceipeViewModel getReceipeViewModel;
 
-    private final JButton cancel;
+    private final JButton returnto;
     private GetReceipeController getReceipeController;
 
     public InputIngredientView(GetReceipeViewModel getReceipeViewModel) {
+        this.getReceipeViewModel = getReceipeViewModel;
+        this.getReceipeViewModel.addPropertyChangeListener(this);
+
         final JLabel title = new JLabel("Receipt Generator");
         title.setAlignmentX(Component.CENTER_ALIGNMENT); // Set title"Login Screen"
+
+        final JPanel buttons = new JPanel();
+        returnto = new JButton("Return");
+        buttons.add(returnto);
 
         final GetReceipeState currentState = getReceipeViewModel.getState();
         final JPanel ingredientPanel = new JPanel();
@@ -54,6 +63,20 @@ public class InputIngredientView extends JPanel implements PropertyChangeListene
                 currentState.getCuisineType(),
                 currentState.getAllergy(),
                 currentState.getIngredient());
+
+        returnto.addActionListener(
+                evt -> {
+                    if (evt.getSource().equals(returnto)) {
+                        // Call switchToLoginView only if logoutController is set
+                        if (this.logoutController != null) {
+                            this.logoutController.switchToLoginView();
+                        }
+                        else {
+                            System.out.println("LogoutController is not initialized.");
+                        }
+                    }
+                }
+        );
 
         // three ingredients are provided.
         for (int i = 0; i < 3; i++) {
@@ -94,6 +117,11 @@ public class InputIngredientView extends JPanel implements PropertyChangeListene
                 ingredientPanel.add(ingredientLabel);
             }
         }
+
+        this.add(title);
+        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        this.add(buttons);
+
     }
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
@@ -101,5 +129,9 @@ public class InputIngredientView extends JPanel implements PropertyChangeListene
 
     public void setGetReceipeController(GetReceipeController getReceipeController) {
         this.getReceipeController = getReceipeController;
+    }
+
+    public String getViewName() {
+        return viewName;
     }
 }

@@ -84,6 +84,7 @@ public class AppBuilder {
     private ChangePasswordViewModel changePasswordViewModel;
     private ChangeWeightViewModel changeWeightViewModel;
     private ChangePasswordView changePasswordView;
+    private ChangeWeightView changeWeightView;
     private GetReceipeViewModel getReceipeViewModel;
     private InputIngredientView inputIngredientView;
 
@@ -131,10 +132,31 @@ public class AppBuilder {
     public AppBuilder addChangePasswordView() {
         changePasswordViewModel = new ChangePasswordViewModel();
         changePasswordView = new ChangePasswordView(changePasswordViewModel);
-        cardPanel.add(loggedInView, loggedInView.getViewName());
+        cardPanel.add(changePasswordView, changePasswordView.getViewName());
         return this;
     }
 
+    /**
+     * Adds the ChangeWeight View to the application.
+     * @return this builder
+     */
+    public AppBuilder addChangeWeightView() {
+        changeWeightViewModel = new ChangeWeightViewModel();
+        changeWeightView = new ChangeWeightView(changeWeightViewModel);
+        cardPanel.add(changeWeightView, changeWeightView.getViewName());
+        return this;
+    }
+
+    /**
+     * Adds the Generate Receipt View to the application.
+     * @return this builder
+     */
+    public AppBuilder addInputIngredientView() {
+        getReceipeViewModel = new GetReceipeViewModel();
+        inputIngredientView = new InputIngredientView(getReceipeViewModel);
+        cardPanel.add(inputIngredientView, inputIngredientView.getViewName());
+        return this;
+    }
 
     /**
      * Adds the Signup Use Case to the application.
