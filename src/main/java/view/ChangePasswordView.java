@@ -1,79 +1,103 @@
 package view;
 
 import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import interface_adapter.change_password.LoggedInState;
-import interface_adapter.change_password.LoggedInViewModel;
+import interface_adapter.change_password.*;
 import interface_adapter.change_weight.ChangeWeightController;
-import interface_adapter.change_password.ChangePasswordController;
+import interface_adapter.login.LoginState;
 import interface_adapter.logout.LogoutController;
+import interface_adapter.signup.SignupState;
+import interface_adapter.signup.SignupViewModel;
 
 /**
  * The View for when the user want to change password.
  */
 public class ChangePasswordView extends JPanel implements PropertyChangeListener {
 
-    private final String viewName = "logged in";
-    private LoggedInViewModel loggedInViewModel;
+    private final String viewName = "change password";
+
+    private final ChangePasswordViewModel changePasswordViewModel;
     private final JLabel passwordErrorField = new JLabel();
     private ChangePasswordController changePasswordController;
     private LogoutController logoutController;
 
-    private JLabel username;
+    private JButton confirm;
+    private JButton cancel;
+    private final JLabel username;
 
-    private JButton logOut;
+    private final JPasswordField passwordInputField = new JPasswordField(15);
 
-    private final JTextField passwordInputField = new JTextField(15);
-    private JButton changePassword;
-
-    public ChangePasswordView(LoggedInViewModel loggedInViewModel, JLabel username,
-                              JButton logOut, JButton changePassword) {
-        this.loggedInViewModel = loggedInViewModel;
-        this.username = username;
-        this.logOut = logOut;
-        this.changePassword = changePassword;
-    }
-
-    public void LoggedInView(LoggedInViewModel loggedInViewModel) {
-        this.loggedInViewModel = loggedInViewModel;
-        this.loggedInViewModel.addPropertyChangeListener(this);
-
-        final JLabel title = new JLabel("Logged In Screen");
-        title.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        final LabelTextPanel passwordInfo = new LabelTextPanel(
-                new JLabel("New Password"), passwordInputField);
+    public ChangePasswordView(ChangePasswordViewModel changePasswordViewModel) {
+        this.changePasswordViewModel = changePasswordViewModel;
+        this.changePasswordViewModel.addPropertyChangeListener(this);
 
         final JLabel usernameInfo = new JLabel("Currently logged in: ");
-        usernameInfo.setAlignmentX(Component.CENTER_ALIGNMENT);
         username = new JLabel();
+        usernameInfo.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        final JLabel title = new JLabel("Change Password");
+        title.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        final LabelTextPanel passwordInfo = new LabelTextPanel(new JLabel("New Password"), passwordInputField);
 
         final JPanel buttons = new JPanel();
-        logOut = new JButton("Log Out");
-        buttons.add(logOut);
+        confirm = new JButton("Confirm");
+        buttons.add(confirm);
+        cancel = new JButton("Cancel");
+        buttons.add(cancel);
 
-        changePassword = new JButton("Change Password");
-        buttons.add(changePassword);
+        confirm.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent evt) {
+                        if (evt.getSource().equals(confirm)) {
+                            final ChangePasswordState currentState = changePasswordViewModel.getState();
+
+                            changePasswordController.execute(
+                                    currentState.getUsername(),
+                                    currentState.getPassword(),
+                                    currentState.getHeight(),
+                                    currentState.getWeight(),
+                                    currentState.getGender(),
+                                    currentState.getAge(),
+                                    currentState.getMealType(),
+                                    currentState.getCuisineType(),
+                                    currentState.getAllergy(),
+                                    currentState.getIngredient()
+                            );
+                        }
+                    }
+                }
+        );
+
+        cancel.addActionListener(
+                evt -> {
+                    if (evt.getSource().equals(cancel)) {
+                        // Call switchToLoginView only if logoutController is set
+                        if (this.logoutController != null) {
+                            this.logoutController.switchToLoginView();
+                        }
+                        else {
+                            System.out.println("LogoutController is not initialized.");
+                        }
+                    }
+                }
+        );
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         passwordInputField.getDocument().addDocumentListener(new DocumentListener() {
-
             private void documentListenerHelper() {
-                final LoggedInState currentState = loggedInViewModel.getState();
+                final ChangePasswordState currentState = changePasswordViewModel.getState();
                 currentState.setPassword(passwordInputField.getText());
-                loggedInViewModel.setState(currentState);
+                changePasswordViewModel.setState(currentState);
             }
 
             @Override
@@ -92,43 +116,13 @@ public class ChangePasswordView extends JPanel implements PropertyChangeListener
             }
         });
 
-        JButton finalChangePassword = changePassword;
-        changePassword.addActionListener(
-                // This creates an anonymous subclass of ActionListener and instantiates it.
-                evt -> {
-                    if (evt.getSource().equals(finalChangePassword)) {
-                        final LoggedInState currentState = loggedInViewModel.getState();
-
-                        this.changePasswordController.execute(
-                                currentState.getUsername(),
-                                currentState.getPassword(),
-                                currentState.getHeight(),
-                                currentState.getWeight(),
-                                currentState.getGender(),
-                                currentState.getAge(),
-                                currentState.getMealType(),
-                                currentState.getCuisineType(),
-                                currentState.getAllergy(),
-                                currentState.getIngredient()
-                        );
-                    }
-                }
-        );
-
-        logOut.addActionListener(
-                // This creates an anonymous subclass of ActionListener and instantiates it.
-                evt -> {
-                    if (evt.getSource().equals(logOut)) {
-                        // execute the logout use case through the Controller
-                        // 1. get the state out of the loggedInViewModel. It contains the username.
-                        // 2. Execute the logout Controller.
-                    }
-                }
-        );
+        changePasswordListener();
 
         this.add(title);
         this.add(usernameInfo);
         this.add(username);
+
+        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         this.add(passwordInfo);
         this.add(passwordErrorField);
@@ -159,5 +153,31 @@ public class ChangePasswordView extends JPanel implements PropertyChangeListener
 
     public void setChangePasswordController(ChangePasswordController changePasswordController) {
         this.changePasswordController = changePasswordController;
+    }
+
+    private void changePasswordListener() {
+        passwordInputField.getDocument().addDocumentListener(new DocumentListener() {
+
+            private void documentListenerHelper() {
+                final ChangePasswordState currentState = changePasswordViewModel.getState();
+                currentState.setUsername(passwordInputField.getText());
+                changePasswordViewModel.setState(currentState);
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                documentListenerHelper();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                documentListenerHelper();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                documentListenerHelper();
+            }
+        });
     }
 }

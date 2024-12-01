@@ -1,9 +1,9 @@
 package interface_adapter.change_password;
 
 /**
- * The State information representing the logged-in user.
+ * The state for the Signup View Model.
  */
-public class LoggedInState {
+public class ChangePasswordState {
     private String username = "";
 
     private String password = "";
@@ -17,7 +17,7 @@ public class LoggedInState {
     private String cuisineType;
     private String[] ingredient;
 
-    public LoggedInState(LoggedInState copy) {
+    public ChangePasswordState(ChangePasswordState copy) {
         username = copy.username;
         password = copy.password;
         height = copy.height;
@@ -32,7 +32,7 @@ public class LoggedInState {
     }
 
     // default
-    public LoggedInState(){}
+    public ChangePasswordState(){}
 
     public String getUsername() {
         return username;

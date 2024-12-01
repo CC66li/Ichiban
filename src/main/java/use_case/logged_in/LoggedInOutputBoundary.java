@@ -20,7 +20,7 @@ public interface LoggedInOutputBoundary {
     void prepareFailView(String errorMessage);
 
     /**
-     * Executes the switch to Get Receipt view use case.
+     * Executes the switch to InputIngredient view use case.
      */
-    void switchToGetReceiptView();
+    void switchToInputIngredientView();
 }

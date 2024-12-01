@@ -18,5 +18,5 @@ public interface LoggedInInputBoundary {
     /**
      * Executes the switch to Get Receipt view use case.
      */
-    void switchToGetReceiptView();
+    void switchToInputIngredientView();
 }
