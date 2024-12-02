@@ -2,6 +2,7 @@ package view;
 
 import interface_adapter.get_receipe.GetReceipeController;
 import interface_adapter.get_receipe.GetReceipeViewModel;
+import interface_adapter.login.LoginState;
 import interface_adapter.logout.LogoutController;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -61,6 +62,8 @@ public class InputIngredientView extends JPanel implements PropertyChangeListene
                 System.out.println("LogoutController is not initialized.");
             }
         });
+
+        fetchAndDisplayIngredients(ingredientPanel);
 
     }
 

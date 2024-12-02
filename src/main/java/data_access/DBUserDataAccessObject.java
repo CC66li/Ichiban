@@ -155,6 +155,8 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         final JSONObject requestBody = new JSONObject();
         requestBody.put(USERNAME, user.getName());
         requestBody.put(PASSWORD, user.getPassword());
+        // New line need to change
+        requestBody.put(INGREDIENT, user.getIngredient());
         final RequestBody body = RequestBody.create(requestBody.toString(), mediaType);
         final Request request = new Request.Builder()
                 .url("http://vm003.teach.cs.toronto.edu:20112/user")

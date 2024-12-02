@@ -118,7 +118,8 @@ public class AppBuilder {
      */
     public AppBuilder addLoggedInView() {
         loggedInViewModel = new LoggedInViewModel();
-        loggedInView = new LoggedInView(loggedInViewModel);
+        getReceipeViewModel = new GetReceipeViewModel();
+        loggedInView = new LoggedInView(loggedInViewModel, getReceipeViewModel);
         cardPanel.add(loggedInView, loggedInView.getViewName());
         return this;
     }
