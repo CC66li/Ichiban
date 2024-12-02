@@ -14,6 +14,7 @@ import interface_adapter.change_password.LoggedInState;
 import interface_adapter.change_password.LoggedInViewModel;
 import interface_adapter.change_weight.ChangeWeightController;
 import interface_adapter.change_password.ChangePasswordController;
+import interface_adapter.change_weight.ChangeWeightViewModel;
 import interface_adapter.get_receipe.GetReceipeController;
 import interface_adapter.get_receipe.GetReceipeViewModel;
 import interface_adapter.logged_in.LoggedInController;
@@ -26,8 +27,8 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
 
     private final String viewName = "logged in";
     private final LoggedInViewModel loggedInViewModel;
-    private ChangeWeightController changeWeightController;
     private ChangePasswordController changePasswordController;
+    private ChangeWeightController changeWeightController;
     private GetReceipeController getReceipeController;
     private LoggedInController loggedInController;
     private LogoutController logoutController;
@@ -62,6 +63,7 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
     private final JButton changePassword;
     private final JButton changeWeight;
 
+
     public LoggedInView(LoggedInViewModel loggedInViewModel) {
         this.loggedInViewModel = loggedInViewModel;
         this.loggedInViewModel.addPropertyChangeListener(this);
@@ -90,7 +92,7 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
 
         final JLabel usernameInfo = new JLabel("Currently logged in: ");
         username = new JLabel();
-        usernameInfo.setText("Currently logged in: " + username);
+        usernameInfo.setText("Enjoy the meal and remember to Love Yourself!");
         usernameInfo.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // Cuisine types chooser
@@ -454,5 +456,17 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
 
     public void setLoggedInController(LoggedInController loggedInController) {
         this.loggedInController = loggedInController;
+    }
+
+    public void setGetReceipeController(GetReceipeController getReceipeController) {
+        this.getReceipeController = getReceipeController;
+    }
+
+    public void setChangeWeightController(ChangeWeightController changeWeightController) {
+        this.changeWeightController = changeWeightController;
+    }
+
+    public void setChangePasswordController(ChangePasswordController changePasswordController) {
+        this.changePasswordController = changePasswordController;
     }
 }

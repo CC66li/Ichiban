@@ -27,11 +27,15 @@ public class Main {
                                             .addSignupUseCase() //Configure the Signup use case
                                             .addLoginUseCase() // Configure the Login use case
                                             .addLogoutUseCase()     // Configure the Logout use case    
-                                            .addCancelUseCase()    // Configure the Cancel use case
+                // Configure the Cancel use case
                                             .addChangePasswordUseCase() // Configure the Change Password use case
-                                            .addLoggedInUseCase()  // Configure the Logged In use case
+                .addChangePasswordCancelUseCase()
+                                            .addLoggedInUseCase()
+                .addLoggedInCancelUseCase()// Configure the Logged In use case
                                             .addChangeWeightUseCase() // Configure the Change Weight use case
+                .addChangeWeightCancelUseCase()
                                             .addGetReceiptUseCase() // Configure the Get Receipt use case
+                .addInputIngredientCancelUseCase()
                                             .build(); // Build the application
 
          // Pack the JFrame to fit its components
