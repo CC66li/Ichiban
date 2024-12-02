@@ -1,5 +1,7 @@
 package interface_adapter.change_password;
 
+import entity.CommonUser;
+
 /**
  * The state for the Change Password View Model.
  */
@@ -16,22 +18,19 @@ public class ChangePasswordState {
     private String cuisineType;
     private String[] ingredient;
 
-    public ChangePasswordState(ChangePasswordState copy) {
-        username = copy.username;
-        password = copy.password;
-        height = copy.height;
-        weight = copy.weight;
-        gender = copy.gender;
-        age = copy.age;
-        passwordError = copy.passwordError;
+    public ChangePasswordState(CommonUser copy) {
+        username = copy.getName();
+        password = copy.getPassword();
+        height = copy.getHeight();
+        weight = copy.getWeight();
+        gender = copy.getGender();
+        age = copy.getAge();
+        passwordError = null;
         mealType = copy.getMealType();
         allergy = copy.getAllergy();
         cuisineType = copy.getCuisineType();
         ingredient = copy.getIngredient();
     }
-
-    // default
-    public ChangePasswordState(){}
 
     public String getUsername() {
         return username;

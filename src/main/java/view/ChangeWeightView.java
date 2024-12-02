@@ -101,7 +101,7 @@ public class ChangeWeightView extends JPanel implements PropertyChangeListener {
         weightInputField.getDocument().addDocumentListener(new DocumentListener() {
             private void documentListenerHelper() {
                 final ChangeWeightState currentState = ChangeWeightView.this.changeWeightViewModel.getState();
-                currentState.setPassword(weightInputField.getText());
+                currentState.setWeight(Float.parseFloat(weightInputField.getText()));
                 ChangeWeightView.this.changeWeightViewModel.setState(currentState);
             }
 
