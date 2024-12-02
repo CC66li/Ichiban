@@ -28,7 +28,9 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
     private final LoggedInViewModel loggedInViewModel;
     private ChangeWeightController changeWeightController;
     private ChangePasswordController changePasswordController;
+    private GetReceipeController getReceipeController;
     private LoggedInController loggedInController;
+    private LogoutController logoutController;
     private final JTextField ingredientField = new JTextField(150);
     private final JRadioButton breakButton = new JRadioButton("Breakfast");
     private final JRadioButton lunchButton = new JRadioButton("Lunch");
@@ -52,8 +54,6 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
     private final JRadioButton ameButton = new JRadioButton("American");
     private final JRadioButton itaButton = new JRadioButton("Italian");
     private final ButtonGroup typeGroup = new ButtonGroup();
-    private LogoutController logoutController;
-    private GetReceipeController getReceipeController;
 
     private final JLabel username;
 
@@ -90,6 +90,7 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
 
         final JLabel usernameInfo = new JLabel("Currently logged in: ");
         username = new JLabel();
+        usernameInfo.setText("Currently logged in: " + username);
         usernameInfo.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // Cuisine types chooser
@@ -187,18 +188,40 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
 
         changePassword.addActionListener(
                 // This would switch to change password view when it acts.
-                new ActionListener() {
-                    public void actionPerformed(ActionEvent evt) {
-                        changePasswordController.switchToChangePasswordView();
+//                new ActionListener() {
+//                    public void actionPerformed(ActionEvent evt) {
+//                        changePasswordController.switchToChangePasswordView();
+//                    }
+//                }
+                evt -> {
+                    if (evt.getSource().equals(changePassword)) {
+                        // Call switchToLoginView only if logoutController is set
+                        if (this.changePasswordController != null) {
+                            this.changePasswordController.switchToChangePasswordView();
+                        }
+                        else {
+                            System.out.println("ChangePasswordController is not initialized.");
+                        }
                     }
                 }
         );
 
         changeWeight.addActionListener(
-                // This would switch to change weight view when it acts.
-                new ActionListener() {
-                    public void actionPerformed(ActionEvent evt) {
-                        changeWeightController.switchToChangeWeightView();
+//                // This would switch to change weight view when it acts.
+//                new ActionListener() {
+//                    public void actionPerformed(ActionEvent evt) {
+//                        changeWeightController.switchToChangeWeightView();
+//                    }
+//                }
+                evt -> {
+                    if (evt.getSource().equals(changeWeight)) {
+                        // Call switchToLoginView only if logoutController is set
+                        if (this.changeWeightController != null) {
+                            this.changeWeightController.switchToChangeWeightView();
+                        }
+                        else {
+                            System.out.println("ChangeWeightController is not initialized.");
+                        }
                     }
                 }
         );
@@ -218,9 +241,20 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
         );
 
         generateReceipt.addActionListener(
-                new ActionListener() {
-                    public void actionPerformed(ActionEvent evt) {
-                        loggedInController.switchToInputIngredientView();
+//                new ActionListener() {
+//                    public void actionPerformed(ActionEvent evt) {
+//                        loggedInController.switchToInputIngredientView();
+//                    }
+//                }
+                evt -> {
+                    if (evt.getSource().equals(generateReceipt)) {
+                        // Call switchToLoginView only if logoutController is set
+                        if (this.getReceipeController != null) {
+                            this.getReceipeController.switchToInputIngredientView();
+                        }
+                        else {
+                            System.out.println("ChangeWeightController is not initialized.");
+                        }
                     }
                 }
         );
