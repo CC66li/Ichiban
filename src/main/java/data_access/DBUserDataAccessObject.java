@@ -23,7 +23,8 @@ import use_case.logout.LogoutUserDataAccessInterface;
 import use_case.signup.SignupUserDataAccessInterface;
 
 /**
- * The DAO for user data.
+ * Data Access Object (DAO) implementation for handling user-related data operations.
+ * This class interacts with an external REST API for CRUD operations.
  */
 public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         LoginUserDataAccessInterface,
@@ -32,13 +33,17 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         LogoutUserDataAccessInterface,
         GetReceipeUserDataAccessInterface,
         LoggedInUserDataAccessInterface {
+            // Constants for API interaction
     private static final int SUCCESS_CODE = 200;
     private static final String CONTENT_TYPE_LABEL = "Content-Type";
     private static final String CONTENT_TYPE_JSON = "application/json";
     private static final String STATUS_CODE_LABEL = "status_code";
+    private static final String MESSAGE = "message";
+
+
+    // User attributes keys
     private static final String USERNAME = "username";
     private static final String PASSWORD = "password";
-    private static final String MESSAGE = "message";
     private static final String HEIGHT = "height";
     private static final String WEIGHT = "weight";
     private static final String GENDER = "male";
@@ -47,14 +52,24 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
     private static final String CUISINETYPE = "cuisineType";
     private static final String ALLERGY = "allergy";
     private static final String INGREDIENT = "ingredient";
-    private String currentUsername;
 
+    private String currentUsername;
     private final UserFactory userFactory;
 
+    /**
+     * Constructor to initialize the DAO with a UserFactory.
+     * @param userFactory the factory to create User objects
+     */
     public DBUserDataAccessObject(UserFactory userFactory) {
 
         this.userFactory = userFactory;
     }
+
+    /**
+     * Fetches a User by username.
+     * @param username the username to fetch
+     * @return the User object if found
+     */
     @Override
     public User get(String username) {
         // Make an API call to get the user object.
@@ -101,6 +116,11 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         this.currentUsername = name;
     }
 
+    /**
+     * Checks if a user exists by username.
+     * @param username the username to check
+     * @return true if the user exists, false otherwise
+     */
     @Override
     public boolean existsByName(String username) {
         final OkHttpClient client = new OkHttpClient().newBuilder()
@@ -121,6 +141,10 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         }
     }
 
+    /**
+     * Saves a new user to the database.
+     * @param user the User object to save
+     */
     @Override
     public void save(User user) {
         final OkHttpClient client = new OkHttpClient().newBuilder()
@@ -154,6 +178,10 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         }
     }
 
+    /**
+     * Updates the user's password.
+     * @param user the User object with updated password
+     */
     @Override
     public void changePassword(User user) {
         final OkHttpClient client = new OkHttpClient().newBuilder()
@@ -187,6 +215,10 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         }
     }
 
+    /**
+     * Updates the user's weight.
+     * @param user the User object with updated weight
+     */
     @Override
     public void changeWeight(User user) {
         final OkHttpClient client = new OkHttpClient().newBuilder()
@@ -220,6 +252,11 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         }
     }
 
+    /**
+     * Fetches a list of recipes based on user preferences.
+     * @param user the User object containing preferences
+     * @return a JSONArray of recipes
+     */
     @Override
     public JSONArray getReceipe(User user) {
         final OkHttpClient client = new OkHttpClient().newBuilder()
