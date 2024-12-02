@@ -18,8 +18,8 @@ public class ChangeWeightState {
     private String cuisineType;
     private String[] ingredient;
 
-    public ChangeWeightState(CommonUser copy) {
-        username = copy.getName();
+    public ChangeWeightState(ChangeWeightState copy) {
+        username = copy.getUsername();
         password = copy.getPassword();
         height = copy.getHeight();
         weight = copy.getWeight();
@@ -31,6 +31,8 @@ public class ChangeWeightState {
         cuisineType = copy.getCuisineType();
         ingredient = copy.getIngredient();
     }
+
+    public ChangeWeightState() {}
 
     public String getUsername() {
         return username;

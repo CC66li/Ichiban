@@ -18,7 +18,7 @@ public class ChangePasswordState {
     private String cuisineType;
     private String[] ingredient;
 
-    public ChangePasswordState(CommonUser copy) {
+    public ChangePasswordState(ChangePasswordState copy) {
         username = copy.getName();
         password = copy.getPassword();
         height = copy.getHeight();
@@ -32,7 +32,9 @@ public class ChangePasswordState {
         ingredient = copy.getIngredient();
     }
 
-    public String getUsername() {
+    public ChangePasswordState() {}
+
+    public String getName() {
         return username;
     }
 
