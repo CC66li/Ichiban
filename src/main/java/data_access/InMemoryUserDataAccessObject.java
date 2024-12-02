@@ -76,14 +76,17 @@ public class InMemoryUserDataAccessObject implements SignupUserDataAccessInterfa
 
         String[] ingredients = user.getIngredient();
         String requestUrl = "https://api.spoonacular.com/recipes/findByIngredients?ingredients=";
+
         if (ingredients != null) {
             requestUrl += ingredients[0];
 
             for (int i = 1; i < ingredients.length; i++) {
                 requestUrl += "," + ingredients[i];
             }
+        } else{
+            throw new IllegalArgumentException("Ingredients cannot be null. Please provide valid ingredients.");
         }
-        requestUrl += "&number=9&apiKey=f62ece60c5ea4861adfbf94e38c1a16b";
+        requestUrl += "&number=3&apiKey=f62ece60c5ea4861adfbf94e38c1a16b";
 
         final Request request = new Request.Builder()
                 .url(requestUrl)
@@ -98,17 +101,13 @@ public class InMemoryUserDataAccessObject implements SignupUserDataAccessInterfa
                 return responseBody;
 
             }
-            if (response.body() == null) {
-                System.out.println("Response body is null");
-            }
             else {
-                System.out.println("Request failed: " + response.code());
+                throw new RuntimeException("Failed to fetch recipes: " + response.message());
             }
 
         } catch (IOException | JSONException ex) {
             throw new RuntimeException(ex);
         }
-        return null;
     }
 
     @Override
