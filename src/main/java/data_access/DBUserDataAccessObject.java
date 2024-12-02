@@ -262,51 +262,38 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         final OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
 
-        GetReceipeInputData getReceipeInputData = new GetReceipeInputData(user.getHeight(),
-                user.getWeight(),
-                user.getGender(),
-                user.getAge(),
-                user.getMealType(),
-                user.getCuisineType(),
-                user.getAllergy(),
-                user.getIngredient());
-
         // According to the input get the url
-        String requestUrl = "https://api.edamam.com/api/recipes/v2?type=public&app_id=<ff136c6d>&app_key=<009e6cd694e4752490ac362dc7d>";
-        if (user.getIngredient() != null){
-            for (String item: user.getIngredient()){
-                requestUrl += "&q=" + item;
+        String[] ingredients = user.getIngredient();
+        String requestUrl = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/findByIngredients?ingredients=";
+        if (ingredients != null) {
+            requestUrl += ingredients[0];
+
+            for (int i = 1; i < ingredients.length; i++) {
+                requestUrl += "%2C" + ingredients[i];
             }
         }
-        if (user.getAllergy() != null){
-            requestUrl += "&health=" + user.getAllergy();
-        }
-        if (user.getCuisineType() != null){
-            requestUrl += "&cuisineType=" + user.getCuisineType();
-        }
-        requestUrl += "&calories=0-" + getReceipeInputData.getBMR();
-
+        requestUrl += "&number=3&ranking=0";
 
         final Request request = new Request.Builder()
                 .url(requestUrl)
                 .method("GET", null)
-                .addHeader(CONTENT_TYPE_LABEL, CONTENT_TYPE_JSON)
+                .addHeader("x-rapidapi-host", "spoonacular-recipe-food-nutrition-v1.p.rapidapi.com")
                 .build();
 
-        try {
-            final Response response = client.newCall(request).execute();
-            final JSONObject responseBody = new JSONObject(response.body().string());
+        try (Response response = client.newCall(request).execute()) {
 
-            if (responseBody.getInt(STATUS_CODE_LABEL) == SUCCESS_CODE) {
-                return responseBody.getJSONArray("hits");
-            }
-            else {
-                throw new RuntimeException(responseBody.getString(MESSAGE));
+            if (response.isSuccessful() && response.body() != null) {
+                final JSONArray responseBody = new JSONArray(response.body());
+                return responseBody;
+
+            } else {
+                System.out.println("Request failed: " + response.code());
             }
 
         } catch (IOException | JSONException ex) {
             throw new RuntimeException(ex);
         }
+        return null;
     }
 
     @Override
