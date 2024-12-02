@@ -228,7 +228,7 @@ public class AppBuilder {
      */
     public AppBuilder addGetReceiptUseCase() {
         final GetReceipeOutputBoundary getReceipeOutputBoundary = new GetReceipePresenter(viewManagerModel,
-                getReceipeViewModel, loginViewModel);
+                getReceipeViewModel, loggedInViewModel);
 
         final GetReceipeInputBoundary getReceipeInteractor =
                 new GetReceipeInteractor(userDataAccessObject, getReceipeOutputBoundary, userFactory);
