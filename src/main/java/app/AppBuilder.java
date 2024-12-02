@@ -1,7 +1,6 @@
 package app;
 
 import java.awt.CardLayout;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
@@ -54,27 +53,23 @@ import use_case.logged_in.LoggedInOutputBoundary;
 import view.*;
 
 /**
- * The AppBuilder class is responsible for putting together the pieces of
- * our CA architecture; piece by piece.
- * <p/>
- * This is done by adding each View and then adding related Use Cases.
+ * The AppBuilder class configures the application's MVC components 
+ * and sets up the views and use cases.
  */
-// Checkstyle note: you can ignore the "Class Data Abstraction Coupling"
-//                  and the "Class Fan-Out Complexity" issues for this lab; we encourage
-//                  your team to think about ways to refactor the code to resolve these
-//                  if your team decides to work with this as your starter code
-//                  for your final project this term.
 public class AppBuilder {
+
+        // GUI components
     private final JPanel cardPanel = new JPanel();
     private final CardLayout cardLayout = new CardLayout();
-    // thought question: is the hard dependency below a problem?
+
+        // Core application dependencies
     private final UserFactory userFactory = new CommonUserFactory();
     private final ViewManagerModel viewManagerModel = new ViewManagerModel();
     private final ViewManager viewManager = new ViewManager(cardPanel, cardLayout, viewManagerModel);
 
-    // thought question: is the hard dependency below a problem?
     private final InMemoryUserDataAccessObject userDataAccessObject = new InMemoryUserDataAccessObject();
 
+         // View and ViewModel references
     private SignupView signupView;
     private SignupViewModel signupViewModel;
     private LoginViewModel loginViewModel;
@@ -88,6 +83,9 @@ public class AppBuilder {
     private GetReceipeViewModel getReceipeViewModel;
     private InputIngredientView inputIngredientView;
 
+        /**
+     * Initializes the card layout for managing views.
+     */
     public AppBuilder() {
         cardPanel.setLayout(cardLayout);
     }
@@ -159,7 +157,7 @@ public class AppBuilder {
     }
 
     /**
-     * Adds the Signup Use Case to the application.
+     * Configures the Signup Use Case.
      * @return this builder
      */
     public AppBuilder addSignupUseCase() {
@@ -174,7 +172,7 @@ public class AppBuilder {
     }
 
     /**
-     * Adds the Login Use Case to the application.
+     * Configures the Login Use Case.
      * @return this builder
      */
     public AppBuilder addLoginUseCase() {
@@ -189,7 +187,7 @@ public class AppBuilder {
     }
 
     /**
-     * Adds the Change Weight Use Case to the application.
+     * Configures the Change Weight Use Case.
      * @return this builder
      */
     public AppBuilder addChangeWeightUseCase() {
@@ -206,7 +204,7 @@ public class AppBuilder {
     }
 
     /**
-     * Adds the Change Password Use Case to the application.
+     * Configures the Change Password Use Case.
      * @return this builder
      */
     public AppBuilder addChangePasswordUseCase() {
@@ -223,7 +221,7 @@ public class AppBuilder {
     }
 
     /**
-     * Adds the GetReceipt Use Case to the application.
+     * Configures the Get Receipt Use Case.
      * @return this builder
      */
     public AppBuilder addGetReceiptUseCase() {
@@ -241,7 +239,7 @@ public class AppBuilder {
     }
 
     /**
-     * Adds the LoggedIn Use Case to the application.
+     * Configures the LoggedIn Use Case.
      * @return this builder
      */
     public AppBuilder addLoggedInUseCase() {
@@ -257,7 +255,7 @@ public class AppBuilder {
     }
 
     /**
-     * Adds the Logout Use Case to the application.
+     * Configures the Logout Use Case.
      * @return this builder
      */
     public AppBuilder addLogoutUseCase() {
@@ -273,7 +271,7 @@ public class AppBuilder {
     }
 
     /**
-     * Adds the Logout Use Case to the application.
+     * Configures the Cancel Use Case.
      * @return this builder
      */
     public AppBuilder addCancelUseCase() {
@@ -289,15 +287,15 @@ public class AppBuilder {
     }
 
     /**
-     * Creates the JFrame for the application and initially sets the SignupView to be displayed.
-     * @return the application
+     * Builds the JFrame and sets the initial view.
+     * @return the application JFrame
      */
     public JFrame build() {
         final JFrame application = new JFrame("Login Example");
         application.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         application.add(cardPanel);
-
+        // Set the initial state to Signup View
         viewManagerModel.setState(signupView.getViewName());
         viewManagerModel.firePropertyChanged();
 
