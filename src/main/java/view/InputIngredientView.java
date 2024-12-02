@@ -181,17 +181,16 @@ public class InputIngredientView extends JPanel implements PropertyChangeListene
             // Display each ingredient
             if (ingredients != null){
                 for (int i = 0; i < ingredients.length(); i++) {
-                    JSONObject hit = ingredients.getJSONObject(i);
-                    JSONObject recipe = hit.getJSONObject("recipe");
+                    JSONObject eachReceipt = ingredients.getJSONObject(i);
 
                     // Add recipe label
-                    JLabel labelTitle = new JLabel(recipe.getString("label"));
+                    JLabel labelTitle = new JLabel(eachReceipt.getString("title"));
                     labelTitle.setFont(new Font("Arial", Font.BOLD, 16));
                     ingredientPanel.add(labelTitle);
 
                     // Add recipe image
                     try {
-                        URL imageUrlObject = new URL(recipe.getString("image"));
+                        URL imageUrlObject = new URL(eachReceipt.getString("image"));
                         BufferedImage recipeImage = ImageIO.read(imageUrlObject);
                         JLabel imageLabel = new JLabel(new ImageIcon(recipeImage));
                         ingredientPanel.add(imageLabel);
@@ -199,13 +198,6 @@ public class InputIngredientView extends JPanel implements PropertyChangeListene
                         JLabel errorLabel = new JLabel("[Image not available]");
                         ingredientPanel.add(errorLabel);
                     }
-
-                    // Add ingredients list in a JTable
-                    JSONArray listIngredients = recipe.getJSONArray("ingredients");
-                    JTable ingredientTable = createTableFromJSONArray(listIngredients);
-                    JScrollPane tableScrollPane = new JScrollPane(ingredientTable);
-                    tableScrollPane.setPreferredSize(new Dimension(400, 100));
-                    ingredientPanel.add(tableScrollPane);
                 }
             }
             else{
@@ -216,17 +208,6 @@ public class InputIngredientView extends JPanel implements PropertyChangeListene
             ingredientPanel.add(errorLabel);
             e.printStackTrace();
         }
-    }
-
-    private JTable createTableFromJSONArray(JSONArray jsonArray) {
-        DefaultTableModel tableModel = new DefaultTableModel();
-        tableModel.addColumn("Ingredient");
-
-        for (int i = 0; i < jsonArray.length(); i++) {
-            tableModel.addRow(new Object[]{jsonArray.getString(i)});
-        }
-
-        return new JTable(tableModel);
     }
 
     @Override
