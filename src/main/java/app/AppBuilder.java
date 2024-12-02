@@ -198,8 +198,10 @@ public class AppBuilder {
         final ChangeWeightInputBoundary changeWeightInteractor =
                 new ChangeWeightInteractor(userDataAccessObject, changeWeightOutputBoundary, userFactory);
 
-        final ChangeWeightController changeWeightController =
-                new ChangeWeightController(changeWeightInteractor);
+        final ChangeWeightController changeWeightController = new ChangeWeightController(changeWeightInteractor);
+
+        loggedInView.setChangeWeightController(changeWeightController);
+
         changeWeightView = new ChangeWeightView(changeWeightViewModel, changeWeightController);
         cardPanel.add(changeWeightView, changeWeightView.getViewName());
         return this;
@@ -220,6 +222,8 @@ public class AppBuilder {
 
         final ChangePasswordController changePasswordController =
                 new ChangePasswordController(changePasswordInteractor);
+
+        loggedInView.setChangePasswordController(changePasswordController);
 
         changePasswordView = new ChangePasswordView(changePasswordViewModel, changePasswordController);
         cardPanel.add(changePasswordView, changePasswordView.getViewName());
@@ -242,6 +246,8 @@ public class AppBuilder {
         final GetReceipeController getReceipeController =
                 new GetReceipeController(getReceipeInteractor);
 
+        loggedInView.setGetReceipeController(getReceipeController);
+
         inputIngredientView = new InputIngredientView(getReceipeViewModel,
                 getReceipeController);
         cardPanel.add(inputIngredientView, inputIngredientView.getViewName());
@@ -261,6 +267,7 @@ public class AppBuilder {
 
         final LoggedInController loggedInController = new LoggedInController(loggedInInteractor);
         loggedInView.setLoggedInController(loggedInController);
+
         return this;
     }
 
@@ -284,7 +291,7 @@ public class AppBuilder {
      * Configures the Cancel Use Case.
      * @return this builder
      */
-    public AppBuilder addCancelUseCase() {
+    public AppBuilder addLoggedInCancelUseCase() {
         final LogoutOutputBoundary logoutOutputBoundary = new LogoutPresenter(viewManagerModel,
                 loggedInViewModel, loginViewModel);
 
@@ -293,6 +300,58 @@ public class AppBuilder {
 
         final LogoutController logoutController = new LogoutController(logoutInteractor);
         loggedInView.setLogoutController(logoutController);
+
+        return this;
+    }
+
+    /**
+     * Configures the Cancel Use Case.
+     * @return this builder
+     */
+    public AppBuilder addChangeWeightCancelUseCase() {
+        final LogoutOutputBoundary logoutOutputBoundary = new LogoutPresenter(viewManagerModel,
+                loggedInViewModel, loginViewModel);
+
+        final LogoutInputBoundary logoutInteractor =
+                new LogoutInteractor(userDataAccessObject, logoutOutputBoundary);
+
+        final LogoutController logoutController = new LogoutController(logoutInteractor);
+        changeWeightView.setLogoutController(logoutController);
+
+        return this;
+    }
+
+    /**
+     * Configures the Cancel Use Case.
+     * @return this builder
+     */
+    public AppBuilder addChangePasswordCancelUseCase() {
+        final LogoutOutputBoundary logoutOutputBoundary = new LogoutPresenter(viewManagerModel,
+                loggedInViewModel, loginViewModel);
+
+        final LogoutInputBoundary logoutInteractor =
+                new LogoutInteractor(userDataAccessObject, logoutOutputBoundary);
+
+        final LogoutController logoutController = new LogoutController(logoutInteractor);
+
+        changePasswordView.setLogoutController(logoutController);
+        return this;
+    }
+
+    /**
+     * Configures the Cancel Use Case.
+     * @return this builder
+     */
+    public AppBuilder addInputIngredientCancelUseCase() {
+        final LogoutOutputBoundary logoutOutputBoundary = new LogoutPresenter(viewManagerModel,
+                loggedInViewModel, loginViewModel);
+
+        final LogoutInputBoundary logoutInteractor =
+                new LogoutInteractor(userDataAccessObject, logoutOutputBoundary);
+
+        final LogoutController logoutController = new LogoutController(logoutInteractor);
+
+        inputIngredientView.setLogoutController(logoutController);
         return this;
     }
 
@@ -301,7 +360,7 @@ public class AppBuilder {
      * @return the application JFrame
      */
     public JFrame build() {
-        final JFrame application = new JFrame("Login Example");
+        final JFrame application = new JFrame("Login Information");
         application.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         application.add(cardPanel);
