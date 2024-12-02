@@ -42,7 +42,11 @@ public class GetReceipeController {
         return getReceipeInputBoundary.execute(getReceipeInputData, loginInputData);
     }
 
-    public void switchToLogInView() {
-        getReceipeInputBoundary.switchToLogInView();
+    public void switchToLoggedInView() {
+        getReceipeInputBoundary.switchToLoggedInView();
+    }
+
+    public void switchToInputIngredientView() {
+        getReceipeInputBoundary.switchToInputIngredientView();
     }
 }
