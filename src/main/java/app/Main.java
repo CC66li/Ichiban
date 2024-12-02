@@ -20,6 +20,7 @@ public class Main {
 
         // Build the application by adding views and use cases
         final JFrame application = appBuilder
+
                                             .addLoginView() // Add the login view
                                             .addSignupView()    // Add the signup view
                                             .addLoggedInView()  // Add the logged-in view

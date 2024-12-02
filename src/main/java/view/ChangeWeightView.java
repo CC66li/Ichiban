@@ -39,8 +39,10 @@ public class ChangeWeightView extends JPanel implements PropertyChangeListener {
 
     private final JTextField weightInputField = new JTextField(15);
 
-    public ChangeWeightView(ChangeWeightViewModel changeWeightViewModel) {
+    public ChangeWeightView(ChangeWeightViewModel changeWeightViewModel,
+                            ChangeWeightController changeWeightController) {
         this.changeWeightViewModel = changeWeightViewModel;
+        this.changeWeightController = changeWeightController;
         this.changeWeightViewModel.addPropertyChangeListener(this);
 
         final JLabel usernameInfo = new JLabel("Currently logged in: ");
@@ -62,9 +64,9 @@ public class ChangeWeightView extends JPanel implements PropertyChangeListener {
                 new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
                         if (evt.getSource().equals(confirm)) {
-                            final ChangeWeightState currentState = changeWeightViewModel.getState();
+                            final ChangeWeightState currentState = ChangeWeightView.this.changeWeightViewModel.getState();
 
-                            changeWeightController.execute(
+                            ChangeWeightView.this.changeWeightController.execute(
                                     currentState.getUsername(),
                                     currentState.getPassword(),
                                     currentState.getHeight(),
@@ -98,9 +100,9 @@ public class ChangeWeightView extends JPanel implements PropertyChangeListener {
 
         weightInputField.getDocument().addDocumentListener(new DocumentListener() {
             private void documentListenerHelper() {
-                final ChangeWeightState currentState = changeWeightViewModel.getState();
+                final ChangeWeightState currentState = ChangeWeightView.this.changeWeightViewModel.getState();
                 currentState.setPassword(weightInputField.getText());
-                changeWeightViewModel.setState(currentState);
+                ChangeWeightView.this.changeWeightViewModel.setState(currentState);
             }
 
             @Override

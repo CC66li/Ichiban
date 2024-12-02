@@ -43,9 +43,11 @@ public class InputIngredientView extends JPanel implements PropertyChangeListene
     private final JButton returnto;
 
 
-    public InputIngredientView(GetReceipeViewModel getReceipeViewModel) {
+    public InputIngredientView(GetReceipeViewModel getReceipeViewModel,
+                               GetReceipeController getReceipeController) {
         this.getReceipeViewModel = getReceipeViewModel;
         this.getReceipeViewModel.addPropertyChangeListener(this);
+        this.getReceipeController = getReceipeController;
 
         setLayout(new BorderLayout());
 
@@ -60,7 +62,6 @@ public class InputIngredientView extends JPanel implements PropertyChangeListene
         add(buttons, BorderLayout.SOUTH);
 
         // Ingredient display area
-        final GetReceipeState currentState = getReceipeViewModel.getState();
         final JPanel ingredientPanel = new JPanel();
         JScrollPane scrollPane = new JScrollPane(ingredientPanel);
         add(scrollPane, BorderLayout.CENTER);
@@ -154,8 +155,12 @@ public class InputIngredientView extends JPanel implements PropertyChangeListene
     private void fetchAndDisplayIngredients(JPanel ingredientPanel) {
         try {
             // Get the current state
-            if (getReceipeController == null || getReceipeViewModel == null) {
-                JLabel errorLabel = new JLabel("Controllers or ViewModel are not initialized.");
+            if (getReceipeController == null){
+                JLabel errorLabel = new JLabel("Controllers are not initialized.");
+                ingredientPanel.add(errorLabel);
+            }
+            if (getReceipeViewModel == null) {
+                JLabel errorLabel = new JLabel("ViewModels are not initialized.");
                 ingredientPanel.add(errorLabel);
                 return;
             }
