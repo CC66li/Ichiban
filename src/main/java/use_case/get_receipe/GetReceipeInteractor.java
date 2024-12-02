@@ -46,7 +46,5 @@ public class GetReceipeInteractor implements GetReceipeInputBoundary {
     }
 
     @Override
-    public void switchToLogInView() {
-        userPresenter.switchToLogInView();
-    }
+    public void switchToLogInView() {userPresenter.switchToLogInView();}
 }

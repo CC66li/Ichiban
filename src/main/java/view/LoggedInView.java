@@ -413,10 +413,6 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
         return viewName;
     }
 
-    public void setChangeWeightController(ChangeWeightController changeWeightController) {
-        this.changeWeightController = changeWeightController;
-    }
-
     public void setLogoutController(LogoutController logoutController) {
         // save the logout controller in the instance variable.
         this.logoutController = logoutController;
@@ -424,9 +420,5 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
 
     public void setLoggedInController(LoggedInController loggedInController) {
         this.loggedInController = loggedInController;
-    }
-
-    public void setChangePasswordController(ChangePasswordController changePasswordController) {
-        this.changePasswordController = changePasswordController;
     }
 }

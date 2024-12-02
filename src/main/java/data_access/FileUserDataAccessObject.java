@@ -20,7 +20,8 @@ import use_case.login.LoginUserDataAccessInterface;
 import use_case.signup.SignupUserDataAccessInterface;
 
 /**
- * DAO for user data implemented using a File to persist the data.
+ * A File-based implementation of the User Data Access Object (DAO).
+ * This class uses a CSV file to persist user data and perform CRUD operations.
  */
 
 public class FileUserDataAccessObject implements SignupUserDataAccessInterface,
@@ -36,9 +37,16 @@ public class FileUserDataAccessObject implements SignupUserDataAccessInterface,
     private final Map<String, User> accounts = new HashMap<>();
     private String currentUsername;
 
+    /**
+     * Constructor for initializing the DAO with a CSV file and user factory.
+     * @param csvPath the path to the CSV file
+     * @param userFactory the factory for creating User objects
+     * @throws IOException if the file cannot be read or written
+     */
     public FileUserDataAccessObject(String csvPath, UserFactory userFactory) throws IOException {
-
         csvFile = new File(csvPath);
+
+        // Define the headers and their order
         headers.put("username", 0);
         headers.put("password", 1);
         headers.put("weight", 2);
@@ -50,8 +58,9 @@ public class FileUserDataAccessObject implements SignupUserDataAccessInterface,
         headers.put("allergy", 8);
         headers.put("ingredient", 9);
 
+        // Initialize the file or load data if it already exists
         if (csvFile.length() == 0) {
-            save();
+            save(); // Save headers if the file is empty
         }
         else {
             try (BufferedReader reader = new BufferedReader(new FileReader(csvFile))) {
@@ -82,6 +91,9 @@ public class FileUserDataAccessObject implements SignupUserDataAccessInterface,
         }
     }
 
+    /**
+     * Saves the current state of user data to the CSV file.
+     */
     private void save() {
         final BufferedWriter writer;
         try {
@@ -132,14 +144,13 @@ public class FileUserDataAccessObject implements SignupUserDataAccessInterface,
 
     @Override
     public void changePassword(User user) {
-        // Replace the User object in the map
-        accounts.put(user.getName(), user);
-        save();
+        accounts.put(user.getName(), user); // Update the User object
+        save(); // Persist changes to file
     }
 
     @Override
     public void changeWeight(User user) {
-        accounts.put(user.getName(), user);
-        save();
+        accounts.put(user.getName(), user); // Update the User object
+        save(); // Persist changes to file
     }
 }
