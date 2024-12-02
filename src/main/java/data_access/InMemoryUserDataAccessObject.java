@@ -72,20 +72,19 @@ public class InMemoryUserDataAccessObject implements SignupUserDataAccessInterfa
         // According to the input get the url
 
         // TestCase:
-        String requestUrl = "https://api.spoonacular.com/recipes/findByIngredients?ingredients=apples,banana&number=3&apiKey=f62ece60c5ea4861adfbf94e38c1a16b";
+        String requestUrl = "https://api.spoonacular.com/recipes/findByIngredients?ingredients=apples,banana&number=9&apiKey=f62ece60c5ea4861adfbf94e38c1a16b";
 
 //        String[] ingredients = user.getIngredient();
 //        String requestUrl = "https://api.spoonacular.com/recipes/findByIngredients?ingredients=";
 //        if (ingredients != null) {
 //            requestUrl += ingredients[0];
-//
+
 //            for (int i = 1; i < ingredients.length; i++) {
 //                requestUrl += "," + ingredients[i];
 //            }
 //        }
-//        requestUrl += "&number=3&apiKey=f62ece60c5ea4861adfbf94e38c1a16b";
+//        requestUrl += "&number=9&apiKey=f62ece60c5ea4861adfbf94e38c1a16b";
 
-        System.out.println("Request URL: " + requestUrl);
         final Request request = new Request.Builder()
                 .url(requestUrl)
                 .method("GET", null)

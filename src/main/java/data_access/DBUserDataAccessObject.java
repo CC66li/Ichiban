@@ -272,8 +272,9 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
                 requestUrl += "," + ingredients[i];
             }
         }
-        requestUrl += "&number=3limitLicense=true&ranking=0&ignorePantry=false";
+        requestUrl += "&number=3&apiKey=f62ece60c5ea4861adfbf94e38c1a16b";
 
+        System.out.println("Request URL: " + requestUrl);
         final Request request = new Request.Builder()
                 .url(requestUrl)
                 .method("GET", null)
@@ -283,7 +284,7 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         try (Response response = client.newCall(request).execute()) {
 
             if (response.isSuccessful() && response.body() != null) {
-                final JSONArray responseBody = new JSONArray(response.body());
+                final JSONArray responseBody = new JSONArray(response.body().string());
                 return responseBody;
 
             } else {
