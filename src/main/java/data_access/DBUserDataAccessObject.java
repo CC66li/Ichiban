@@ -264,26 +264,27 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
 
         // According to the input get the url
         String[] ingredients = user.getIngredient();
-        String requestUrl = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/findByIngredients?ingredients=";
+        String requestUrl = "https://api.spoonacular.com/recipes/findByIngredients?ingredients=";
         if (ingredients != null) {
             requestUrl += ingredients[0];
 
             for (int i = 1; i < ingredients.length; i++) {
-                requestUrl += "%2C" + ingredients[i];
+                requestUrl += "," + ingredients[i];
             }
         }
-        requestUrl += "&number=3&ranking=0";
+        requestUrl += "&number=3&apiKey=f62ece60c5ea4861adfbf94e38c1a16b";
 
+        System.out.println("Request URL: " + requestUrl);
         final Request request = new Request.Builder()
                 .url(requestUrl)
                 .method("GET", null)
-                .addHeader("x-rapidapi-host", "spoonacular-recipe-food-nutrition-v1.p.rapidapi.com")
+                .addHeader(CONTENT_TYPE_LABEL, CONTENT_TYPE_JSON)
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
 
             if (response.isSuccessful() && response.body() != null) {
-                final JSONArray responseBody = new JSONArray(response.body());
+                final JSONArray responseBody = new JSONArray(response.body().string());
                 return responseBody;
 
             } else {

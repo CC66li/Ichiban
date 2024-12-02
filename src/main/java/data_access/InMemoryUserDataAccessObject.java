@@ -35,6 +35,8 @@ public class InMemoryUserDataAccessObject implements SignupUserDataAccessInterfa
     private final Map<String, User> users = new HashMap<>();
 
     private String currentUsername;
+    private static final String CONTENT_TYPE_LABEL = "Content-Type";
+    private static final String CONTENT_TYPE_JSON = "application/json";
 
     @Override
     public boolean existsByName(String identifier) {
@@ -66,37 +68,33 @@ public class InMemoryUserDataAccessObject implements SignupUserDataAccessInterfa
     public JSONArray getReceipe(User user) {
         final OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
-        GetReceipeInputData getReceipeInputData = new GetReceipeInputData(user.getHeight(),
-                user.getWeight(),
-                user.getGender(),
-                user.getAge(),
-                user.getMealType(),
-                user.getCuisineType(),
-                user.getAllergy(),
-                user.getIngredient());
 
         // According to the input get the url
-        String[] ingredients = user.getIngredient();
-        String requestUrl = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/findByIngredients?ingredients=";
-        if (ingredients != null) {
-            requestUrl += ingredients[0];
 
-            for (int i = 1; i < ingredients.length; i++) {
-                requestUrl += "%2C" + ingredients[i];
-            }
-        }
-        requestUrl += "&number=3&ranking=0";
+        // TestCase:
+        String requestUrl = "https://api.spoonacular.com/recipes/findByIngredients?ingredients=apples,banana&number=9&apiKey=f62ece60c5ea4861adfbf94e38c1a16b";
+
+//        String[] ingredients = user.getIngredient();
+//        String requestUrl = "https://api.spoonacular.com/recipes/findByIngredients?ingredients=";
+//        if (ingredients != null) {
+//            requestUrl += ingredients[0];
+
+//            for (int i = 1; i < ingredients.length; i++) {
+//                requestUrl += "," + ingredients[i];
+//            }
+//        }
+//        requestUrl += "&number=9&apiKey=f62ece60c5ea4861adfbf94e38c1a16b";
 
         final Request request = new Request.Builder()
                 .url(requestUrl)
                 .method("GET", null)
-                .addHeader("x-rapidapi-host", "spoonacular-recipe-food-nutrition-v1.p.rapidapi.com")
+                .addHeader(CONTENT_TYPE_LABEL, CONTENT_TYPE_JSON)
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
 
             if (response.isSuccessful() && response.body() != null) {
-                final JSONArray responseBody = new JSONArray(response.body());
+                final JSONArray responseBody = new JSONArray(response.body().string());
                 return responseBody;
 
             } else {
