@@ -21,5 +21,10 @@ public interface GetReceipeInputBoundary {
     /**
      * Executes the switch to login view use case.
      */
-    void switchToLogInView();
+    void switchToLoggedInView();
+
+    /**
+     * Executes the switch to InputIngredient view use case.
+     */
+    void switchToInputIngredientView();
 }
