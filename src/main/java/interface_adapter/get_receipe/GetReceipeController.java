@@ -16,6 +16,11 @@ public class GetReceipeController {
         this.getReceipeInputBoundary = getReceipeInputInteractor;
     }
 
+    // default
+    public GetReceipeController(){
+        this.getReceipeInputBoundary = null;
+    }
+
     /**
      * Executes the GetReceipt Use Case.
      * @param username the height of user

@@ -125,38 +125,38 @@ public class AppBuilder {
         return this;
     }
 
-    /**
-     * Adds the ChangePassword View to the application.
-     * @return this builder
-     */
-    public AppBuilder addChangePasswordView() {
-        changePasswordViewModel = new ChangePasswordViewModel();
-        changePasswordView = new ChangePasswordView(changePasswordViewModel);
-        cardPanel.add(changePasswordView, changePasswordView.getViewName());
-        return this;
-    }
+//    /**
+//     * Adds the ChangePassword View to the application.
+//     * @return this builder
+//     */
+//    public AppBuilder addChangePasswordView() {
+//        changePasswordViewModel = new ChangePasswordViewModel();
+//        changePasswordView = new ChangePasswordView(changePasswordViewModel);
+//        cardPanel.add(changePasswordView, changePasswordView.getViewName());
+//        return this;
+//    }
 
-    /**
-     * Adds the ChangeWeight View to the application.
-     * @return this builder
-     */
-    public AppBuilder addChangeWeightView() {
-        changeWeightViewModel = new ChangeWeightViewModel();
-        changeWeightView = new ChangeWeightView(changeWeightViewModel);
-        cardPanel.add(changeWeightView, changeWeightView.getViewName());
-        return this;
-    }
+//    /**
+//     * Adds the ChangeWeight View to the application.
+//     * @return this builder
+//     */
+//    public AppBuilder addChangeWeightView() {
+//        changeWeightViewModel = new ChangeWeightViewModel();
+//        changeWeightView = new ChangeWeightView(changeWeightViewModel);
+//        cardPanel.add(changeWeightView, changeWeightView.getViewName());
+//        return this;
+//    }
 
-    /**
-     * Adds the Generate Receipt View to the application.
-     * @return this builder
-     */
-    public AppBuilder addInputIngredientView() {
-        getReceipeViewModel = new GetReceipeViewModel();
-        inputIngredientView = new InputIngredientView(getReceipeViewModel);
-        cardPanel.add(inputIngredientView, inputIngredientView.getViewName());
-        return this;
-    }
+//    /**
+//     * Adds the Generate Receipt View to the application.
+//     * @return this builder
+//     */
+//    public AppBuilder addInputIngredientView() {
+//        getReceipeViewModel = new GetReceipeViewModel();
+//        inputIngredientView = new InputIngredientView(getReceipeViewModel);
+//        cardPanel.add(inputIngredientView, inputIngredientView.getViewName());
+//        return this;
+//    }
 
     /**
      * Adds the Signup Use Case to the application.
@@ -193,6 +193,7 @@ public class AppBuilder {
      * @return this builder
      */
     public AppBuilder addChangeWeightUseCase() {
+        changeWeightViewModel = new ChangeWeightViewModel();
         final ChangeWeightOutputBoundary changeWeightOutputBoundary =
                 new ChangeWeightPresenter(loggedInViewModel, viewManagerModel, changeWeightViewModel);
 
@@ -201,7 +202,8 @@ public class AppBuilder {
 
         final ChangeWeightController changeWeightController =
                 new ChangeWeightController(changeWeightInteractor);
-        loggedInView.setChangeWeightController(changeWeightController);
+        changeWeightView = new ChangeWeightView(changeWeightViewModel, changeWeightController);
+        cardPanel.add(changeWeightView, changeWeightView.getViewName());
         return this;
     }
 
@@ -210,6 +212,8 @@ public class AppBuilder {
      * @return this builder
      */
     public AppBuilder addChangePasswordUseCase() {
+        changePasswordViewModel = new ChangePasswordViewModel();
+
         final ChangePasswordOutputBoundary changePasswordOutputBoundary =
                 new ChangePasswordPresenter(loggedInViewModel, viewManagerModel, changePasswordViewModel);
 
@@ -218,7 +222,9 @@ public class AppBuilder {
 
         final ChangePasswordController changePasswordController =
                 new ChangePasswordController(changePasswordInteractor);
-        loggedInView.setChangePasswordController(changePasswordController);
+
+        changePasswordView = new ChangePasswordView(changePasswordViewModel, changePasswordController);
+        cardPanel.add(changePasswordView, changePasswordView.getViewName());
         return this;
     }
 
@@ -227,6 +233,8 @@ public class AppBuilder {
      * @return this builder
      */
     public AppBuilder addGetReceiptUseCase() {
+        getReceipeViewModel = new GetReceipeViewModel();
+
         final GetReceipeOutputBoundary getReceipeOutputBoundary = new GetReceipePresenter(viewManagerModel,
                 getReceipeViewModel, loggedInViewModel);
 
@@ -236,7 +244,9 @@ public class AppBuilder {
         final GetReceipeController getReceipeController =
                 new GetReceipeController(getReceipeInteractor);
 
-        inputIngredientView.setGetReceipeController(getReceipeController);
+        inputIngredientView = new InputIngredientView(getReceipeViewModel,
+                getReceipeController);
+        cardPanel.add(inputIngredientView, inputIngredientView.getViewName());
         return this;
     }
 
