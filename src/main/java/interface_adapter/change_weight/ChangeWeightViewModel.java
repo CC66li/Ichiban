@@ -12,6 +12,6 @@ public class ChangeWeightViewModel extends ViewModel<ChangeWeightState>{
 
     public ChangeWeightViewModel() {
         super("change weight");
-        setState(new ChangeWeightState(user));
+        setState(new ChangeWeightState());
     }
 }

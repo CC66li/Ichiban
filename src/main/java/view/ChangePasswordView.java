@@ -59,7 +59,7 @@ public class ChangePasswordView extends JPanel implements PropertyChangeListener
                             final ChangePasswordState currentState = ChangePasswordView.this.changePasswordViewModel.getState();
 
                             ChangePasswordView.this.changePasswordController.execute(
-                                    currentState.getUsername(),
+                                    currentState.getName(),
                                     currentState.getPassword(),
                                     currentState.getHeight(),
                                     currentState.getWeight(),

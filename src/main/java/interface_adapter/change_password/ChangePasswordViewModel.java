@@ -13,6 +13,6 @@ public class ChangePasswordViewModel extends ViewModel<ChangePasswordState> {
 
     public ChangePasswordViewModel() {
         super("change password");
-        setState(new ChangePasswordState(currentUser));
+        setState(new ChangePasswordState());
     }
 }
