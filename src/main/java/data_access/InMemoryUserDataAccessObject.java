@@ -82,15 +82,15 @@ public class InMemoryUserDataAccessObject implements SignupUserDataAccessInterfa
 
         // According to the input get the url
         String requestUrl = "https://api.edamam.com/api/recipes/v2?type=public&app_id=<ff136c6d>&app_key=<009e6cd694e4752490ac362dc7d>";
-        if (user.getIngredient() != null){
-            for (String item: user.getIngredient()){
+        if (user.getIngredient() != null) {
+            for (String item : user.getIngredient()) {
                 requestUrl += "&q=" + item;
             }
         }
-        if (user.getAllergy() != null){
+        if (user.getAllergy() != null) {
             requestUrl += "&health=" + user.getAllergy();
         }
-        if (user.getCuisineType() != null){
+        if (user.getCuisineType() != null) {
             requestUrl += "&cuisineType=" + user.getCuisineType();
         }
         requestUrl += "&calories=0-" + getReceipeInputData.getBMR();
@@ -101,20 +101,20 @@ public class InMemoryUserDataAccessObject implements SignupUserDataAccessInterfa
                 .addHeader(CONTENT_TYPE_LABEL, CONTENT_TYPE_JSON)
                 .build();
 
-        try {
-            final Response response = client.newCall(request).execute();
-            final JSONObject responseBody = new JSONObject(response.body().string());
+        try (Response response = client.newCall(request).execute()) {
 
-            if (responseBody.getInt(STATUS_CODE_LABEL) == SUCCESS_CODE) {
-                return responseBody.getJSONArray("hits");
-            }
-            else {
-                throw new RuntimeException(responseBody.getString(MESSAGE));
+            if (response.isSuccessful()) {
+                final JSONObject responseBody = new JSONObject(response.body().string());
+                final JSONArray hits = responseBody.getJSONArray("hits");
+                return hits;
+            } else {
+                System.out.println("Request failed: " + response.code());
             }
 
         } catch (IOException | JSONException ex) {
             throw new RuntimeException(ex);
         }
+        return null;
     }
 
     @Override

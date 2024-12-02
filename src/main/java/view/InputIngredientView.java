@@ -179,32 +179,37 @@ public class InputIngredientView extends JPanel implements PropertyChangeListene
                     getReceipeViewModel.getState().getIngredient());
 
             // Display each ingredient
-            for (int i = 0; i < ingredients.length(); i++) {
-                JSONObject hit = ingredients.getJSONObject(i);
-                JSONObject recipe = hit.getJSONObject("recipe");
+            if (ingredients != null){
+                for (int i = 0; i < ingredients.length(); i++) {
+                    JSONObject hit = ingredients.getJSONObject(i);
+                    JSONObject recipe = hit.getJSONObject("recipe");
 
-                // Add recipe label
-                JLabel labelTitle = new JLabel(recipe.getString("label"));
-                labelTitle.setFont(new Font("Arial", Font.BOLD, 16));
-                ingredientPanel.add(labelTitle);
+                    // Add recipe label
+                    JLabel labelTitle = new JLabel(recipe.getString("label"));
+                    labelTitle.setFont(new Font("Arial", Font.BOLD, 16));
+                    ingredientPanel.add(labelTitle);
 
-                // Add recipe image
-                try {
-                    URL imageUrlObject = new URL(recipe.getString("image"));
-                    BufferedImage recipeImage = ImageIO.read(imageUrlObject);
-                    JLabel imageLabel = new JLabel(new ImageIcon(recipeImage));
-                    ingredientPanel.add(imageLabel);
-                } catch (Exception e) {
-                    JLabel errorLabel = new JLabel("[Image not available]");
-                    ingredientPanel.add(errorLabel);
+                    // Add recipe image
+                    try {
+                        URL imageUrlObject = new URL(recipe.getString("image"));
+                        BufferedImage recipeImage = ImageIO.read(imageUrlObject);
+                        JLabel imageLabel = new JLabel(new ImageIcon(recipeImage));
+                        ingredientPanel.add(imageLabel);
+                    } catch (Exception e) {
+                        JLabel errorLabel = new JLabel("[Image not available]");
+                        ingredientPanel.add(errorLabel);
+                    }
+
+                    // Add ingredients list in a JTable
+                    JSONArray listIngredients = recipe.getJSONArray("ingredients");
+                    JTable ingredientTable = createTableFromJSONArray(listIngredients);
+                    JScrollPane tableScrollPane = new JScrollPane(ingredientTable);
+                    tableScrollPane.setPreferredSize(new Dimension(400, 100));
+                    ingredientPanel.add(tableScrollPane);
                 }
-
-                // Add ingredients list in a JTable
-                JSONArray listIngredients = recipe.getJSONArray("ingredients");
-                JTable ingredientTable = createTableFromJSONArray(listIngredients);
-                JScrollPane tableScrollPane = new JScrollPane(ingredientTable);
-                tableScrollPane.setPreferredSize(new Dimension(400, 100));
-                ingredientPanel.add(tableScrollPane);
+            }
+            else{
+                System.out.println("No ingredients found.");
             }
         } catch (Exception e) {
             JLabel errorLabel = new JLabel("Error fetching or displaying ingredients: " + e.getMessage());
