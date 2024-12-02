@@ -16,6 +16,7 @@ import interface_adapter.change_weight.ChangeWeightController;
 import interface_adapter.change_password.ChangePasswordController;
 import interface_adapter.change_weight.ChangeWeightViewModel;
 import interface_adapter.get_receipe.GetReceipeController;
+import interface_adapter.get_receipe.GetReceipeState;
 import interface_adapter.get_receipe.GetReceipeViewModel;
 import interface_adapter.logged_in.LoggedInController;
 import interface_adapter.logout.LogoutController;
@@ -27,6 +28,7 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
 
     private final String viewName = "logged in";
     private final LoggedInViewModel loggedInViewModel;
+    private final GetReceipeViewModel getReceipeViewModel;
     private ChangePasswordController changePasswordController;
     private ChangeWeightController changeWeightController;
     private GetReceipeController getReceipeController;
@@ -64,9 +66,11 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
     private final JButton changeWeight;
 
 
-    public LoggedInView(LoggedInViewModel loggedInViewModel) {
+    public LoggedInView(LoggedInViewModel loggedInViewModel, GetReceipeViewModel getReceipeViewModel) {
         this.loggedInViewModel = loggedInViewModel;
         this.loggedInViewModel.addPropertyChangeListener(this);
+        this.getReceipeViewModel = getReceipeViewModel;
+        this.getReceipeViewModel.addPropertyChangeListener(this);
 
         final JLabel title = new JLabel("Menu");
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -74,6 +78,8 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
         //Set the Types buttons here
         final LabelTextPanel ingredientInfo = new LabelTextPanel(
                 new JLabel(LoggedInViewModel.INGREDIENT_LABEL), ingredientField);
+        String input = ingredientField.getText();
+
 
         // Meal types chooser
         final JPanel mealInfo = new JPanel();
@@ -242,24 +248,77 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
                 }
         );
 
-        generateReceipt.addActionListener(
-//                new ActionListener() {
-//                    public void actionPerformed(ActionEvent evt) {
-//                        loggedInController.switchToInputIngredientView();
+        ingredientField.getDocument().addDocumentListener(new DocumentListener() {
+
+            private void documentListenerHelper() {
+                final LoggedInState currentState = loggedInViewModel.getState();
+                String[] result = ingredientField.getText().split(",");
+                currentState.setIngredient(result);
+                LoggedInView.this.getReceipeController.execute(
+                        currentState.getUsername(),
+                        currentState.getPassword(),
+                        currentState.getHeight(),
+                        currentState.getWeight(),
+                        currentState.getGender(),
+                        currentState.getAge(),
+                        currentState.getMealType(),
+                        currentState.getCuisineType(),
+                        currentState.getAllergy(),
+                        currentState.getIngredient()
+                );
+                LoggedInView.this.getReceipeController.switchToInputIngredientView();
+                loggedInViewModel.setState(currentState);
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                documentListenerHelper();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                documentListenerHelper();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                documentListenerHelper();
+            }
+        });
+
+//        generateReceipt.addActionListener(
+////                new ActionListener() {
+////                    public void actionPerformed(ActionEvent evt) {
+////                        loggedInController.switchToInputIngredientView();
+////                    }
+////                }
+//                evt -> {
+//
+//                    if (evt.getSource().equals(generateReceipt)) {
+//
+//                        // Call switchToLoginView only if logoutController is set
+//                        if (this.getReceipeController != null) {
+//                            final GetReceipeState currentState = getReceipeViewModel.getState();
+//                            this.getReceipeController.execute(
+//                                    currentState.getUsername(),
+//                                    currentState.getPassword(),
+//                                    currentState.getHeight(),
+//                                    currentState.getWeight(),
+//                                    currentState.getGender(),
+//                                    currentState.getAge(),
+//                                    currentState.getMealType(),
+//                                    currentState.getCuisineType(),
+//                                    currentState.getAllergy(),
+//                                    currentState.getIngredient()
+//                            );
+//                            this.getReceipeController.switchToInputIngredientView();
+//                        }
+//                        else {
+//                            System.out.println("ChangeWeightController is not initialized.");
+//                        }
 //                    }
 //                }
-                evt -> {
-                    if (evt.getSource().equals(generateReceipt)) {
-                        // Call switchToLoginView only if logoutController is set
-                        if (this.getReceipeController != null) {
-                            this.getReceipeController.switchToInputIngredientView();
-                        }
-                        else {
-                            System.out.println("ChangeWeightController is not initialized.");
-                        }
-                    }
-                }
-        );
+//        );
 
         addIngredientListener();
         addMealTypeListener();
@@ -331,7 +390,9 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
 
             private void documentListenerHelper() {
                 final LoggedInState currentState = loggedInViewModel.getState();
-                currentState.setUsername(ingredientField.getText());
+                String[] result = ingredientField.getText().split(",");
+                currentState.setIngredient(result);
+
                 loggedInViewModel.setState(currentState);
             }
 
