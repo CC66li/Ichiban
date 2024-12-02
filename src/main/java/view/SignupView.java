@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.text.ParseException;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -24,9 +25,6 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
     private final JTextField usernameInputField = new JTextField(15);
     private final JPasswordField passwordInputField = new JPasswordField(15);
     private final JPasswordField repeatPasswordInputField = new JPasswordField(15);
-//    private final JTextField heightField = new JTextField(15);
-//    private final JTextField weightField = new JTextField(15);
-//    private final JTextField ageField = new JTextField(5);
     private final SpinnerNumberModel ageRange = new SpinnerNumberModel(0, 0, 150, 1);
     private final JSpinner ageField = new JSpinner(ageRange);
     private final SpinnerNumberModel weightRange = new SpinnerNumberModel(0, 0, 600, 0.1);
@@ -163,139 +161,65 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
     }
 
     private void addAgeListener() {
-//        ageField.getDocument().addDocumentListener(new DocumentListener() {
-//
-//            private void documentListenerHelper() {
-//                final SignupState currentState = signupViewModel.getState();
-//
-//                try {
-//                    Integer text = (Integer) ageField.getValue();
-//                    currentState.setAge(text);
-//                    signupViewModel.setState(currentState);
-//                } catch (NumberFormatException e) {
-//                    System.out.println("Invalid input. Please enter a valid integer.");
-//                }
-//
-//            }
-//
-//            @Override
-//            public void insertUpdate(DocumentEvent e) {
-//                documentListenerHelper();
-//            }
-//
-//            @Override
-//            public void removeUpdate(DocumentEvent e) {
-//                documentListenerHelper();
-//            }
-//
-//            @Override
-//            public void changedUpdate(DocumentEvent e) {
-//                documentListenerHelper();
-//            }
-//        });
         // Add a ChangeListener to the JSpinner
         ageField.addChangeListener(e -> {
             final SignupState currentState = signupViewModel.getState();
 
             // Get the value from the JSpinner (assuming it's an Integer)
-            try {
-                Integer value = (Integer) ageField.getValue(); // Casting to Integer if using SpinnerNumberModel
-                currentState.setAge(value);
+            Object value = ageField.getValue(); // Get raw value
+            if (value instanceof Integer) {
+                Integer age = (Integer) value; // Safe cast
+                currentState.setAge(age);
                 signupViewModel.setState(currentState);
-            } catch (ClassCastException ex) {
+            } else {
                 System.out.println("Invalid input. Please enter a valid integer.");
+                ageField.setValue(ageRange.getMinimum()); // Reset to minimum valid value
             }
         });
     }
 
     private void addWeightListener() {
-//        weightField.getDocument().addDocumentListener(new DocumentListener() {
-//
-//            private void documentListenerHelper() {
-//                final SignupState currentState = signupViewModel.getState();
-//                String text = weightField.getText();
-//                try {
-//                    // Convert the text to an integer
-//                    float value = Float.parseFloat(text);
-//                    currentState.setWeight(value);
-//                    signupViewModel.setState(currentState);
-//                } catch (NumberFormatException e) {
-//                    System.out.println("Invalid input. Please enter a valid float.");
-//                }
-//            }
-//
-//            @Override
-//            public void insertUpdate(DocumentEvent e) {
-//                documentListenerHelper();
-//            }
-//
-//            @Override
-//            public void removeUpdate(DocumentEvent e) {
-//                documentListenerHelper();
-//            }
-//
-//            @Override
-//            public void changedUpdate(DocumentEvent e) {
-//                documentListenerHelper();
-//            }
-//        });
         // Add a ChangeListener to the JSpinner
         weightField.addChangeListener(e -> {
             final SignupState currentState = signupViewModel.getState();
-
-            // Get the value from the JSpinner (assuming it's an Integer)
             try {
-                Float value = (Float) weightField.getValue(); // Casting to Integer if using SpinnerNumberModel
-                currentState.setWeight(value);
-                signupViewModel.setState(currentState);
-            } catch (ClassCastException ex) {
-                System.out.println("Invalid input. Please enter a valid weight.");
+                Object value = weightField.getValue(); // Get raw value
+                weightField.commitEdit();
+                if (value instanceof Double) {
+                    double weightDouble = (Double) value;
+                    float weight = (float) weightDouble; // Safe cast
+                    currentState.setWeight(weight);
+                    signupViewModel.setState(currentState);
+                } else {
+                    System.out.println("Invalid input. Please enter a valid float for weight.");
+                    weightField.setValue(weightRange.getMinimum()); // Reset to minimum valid value
+                }
+            } catch (ParseException ex) {
+                System.out.println("Invalid input. Resetting to minimum value.");
+                weightField.setValue(weightRange.getMinimum());
             }
         });
     }
 
     private void addHeightListener() {
-//        heightField.getDocument().addDocumentListener(new DocumentListener() {
-//
-//            private void documentListenerHelper() {
-//                final SignupState currentState = signupViewModel.getState();
-//                String text = heightField.getText();
-//                try {
-//                    // Convert the text to an integer
-//                    float value = Float.parseFloat(text);
-//                    currentState.setHeight(value);
-//                    signupViewModel.setState(currentState);
-//                } catch (NumberFormatException e) {
-//                    System.out.println("Invalid input. Please enter a valid float.");
-//                }
-//            }
-//
-//            @Override
-//            public void insertUpdate(DocumentEvent e) {
-//                documentListenerHelper();
-//            }
-//
-//            @Override
-//            public void removeUpdate(DocumentEvent e) {
-//                documentListenerHelper();
-//            }
-//
-//            @Override
-//            public void changedUpdate(DocumentEvent e) {
-//                documentListenerHelper();
-//            }
-//        });
         // Add a ChangeListener to the JSpinner
         heightField.addChangeListener(e -> {
             final SignupState currentState = signupViewModel.getState();
-
-            // Get the value from the JSpinner (assuming it's an Integer)
             try {
-                Float value = (Float) heightField.getValue(); // Casting to Integer if using SpinnerNumberModel
-                currentState.setHeight(value);
-                signupViewModel.setState(currentState);
-            } catch (ClassCastException ex) {
-                System.out.println("Invalid input. Please enter a valid height.");
+                Object value = heightField.getValue(); // Get raw value
+                heightField.commitEdit();
+                if (value instanceof Double) {
+                    double heightDouble = (Double) value;
+                    float height = (float) heightDouble; // Safe cast
+                    currentState.setHeight(height);
+                    signupViewModel.setState(currentState);
+                } else {
+                    System.out.println("Invalid input. Please enter a valid float for height.");
+                    heightField.setValue(heightRange.getMinimum()); // Reset to minimum valid value
+                }
+            } catch (ParseException ex) {
+                System.out.println("Invalid input. Resetting to minimum value.");
+                heightField.setValue(heightRange.getMinimum());
             }
         });
     }

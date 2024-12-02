@@ -36,15 +36,10 @@ public class InMemoryUserDataAccessObject implements SignupUserDataAccessInterfa
 
     // Stores users in memory using their username as the key
     private final Map<String, User> users = new HashMap<>();
-    private String currentUsername; // Tracks the currently logged-in user
 
-    // Constants for HTTP API interactions
-    private static final int SUCCESS_CODE = 200;
+    private String currentUsername;
     private static final String CONTENT_TYPE_LABEL = "Content-Type";
     private static final String CONTENT_TYPE_JSON = "application/json";
-    private static final String STATUS_CODE_LABEL = "status_code";
-    private static final String MESSAGE = "message";
-
 
     /**
      * Checks if a user exists by their username.
@@ -105,31 +100,25 @@ public class InMemoryUserDataAccessObject implements SignupUserDataAccessInterfa
         final OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
 
-        // Prepare input data for the API request
-        GetReceipeInputData getReceipeInputData = new GetReceipeInputData(
-                user.getHeight(),
-                user.getWeight(),
-                user.getGender(),
-                user.getAge(),
-                user.getMealType(),
-                user.getCuisineType(),
-                user.getAllergy(),
-                user.getIngredient());
 
-        // Construct the API request URL
-        String requestUrl = "https://api.edamam.com/api/recipes/v2?type=public&app_id=<ff136c6d>&app_key=<009e6cd694e4752490ac362dc7d>";
-        if (user.getIngredient() != null){
-            for (String item: user.getIngredient()){
-                requestUrl += "&q=" + item;
+        // According to the input get the url
+
+        // TestCase:
+//        String requestUrl = "https://api.spoonacular.com/recipes/findByIngredients?ingredients=apples,banana&number=9&apiKey=f62ece60c5ea4861adfbf94e38c1a16b";
+
+        String[] ingredients = user.getIngredient();
+        String requestUrl = "https://api.spoonacular.com/recipes/findByIngredients?ingredients=";
+
+        if (ingredients != null) {
+            requestUrl += ingredients[0];
+
+            for (int i = 1; i < ingredients.length; i++) {
+                requestUrl += "," + ingredients[i];
             }
+        } else{
+            throw new IllegalArgumentException("Ingredients cannot be null. Please provide valid ingredients.");
         }
-        if (user.getAllergy() != null){
-            requestUrl += "&health=" + user.getAllergy();
-        }
-        if (user.getCuisineType() != null){
-            requestUrl += "&cuisineType=" + user.getCuisineType();
-        }
-        requestUrl += "&calories=0-" + getReceipeInputData.getBMR();
+        requestUrl += "&number=3&apiKey=f62ece60c5ea4861adfbf94e38c1a16b";
 
         // Build the HTTP GET request
         final Request request = new Request.Builder()
@@ -138,16 +127,17 @@ public class InMemoryUserDataAccessObject implements SignupUserDataAccessInterfa
                 .addHeader(CONTENT_TYPE_LABEL, CONTENT_TYPE_JSON)
                 .build();
 
-        try {
-            // Execute the request and parse the response
-            final Response response = client.newCall(request).execute();
-            final JSONObject responseBody = new JSONObject(response.body().string());
 
-            if (responseBody.getInt(STATUS_CODE_LABEL) == SUCCESS_CODE) {
-                return responseBody.getJSONArray("hits"); // Return recipe results
+        try (Response response = client.newCall(request).execute()) {
+
+            if (response.isSuccessful() && response.body() != null) {
+                final JSONArray responseBody = new JSONArray(response.body().string());
+                return responseBody;
+
+
             }
             else {
-                throw new RuntimeException(responseBody.getString(MESSAGE));
+                throw new RuntimeException("Failed to fetch recipes: " + response.message());
             }
 
         } catch (IOException | JSONException ex) {

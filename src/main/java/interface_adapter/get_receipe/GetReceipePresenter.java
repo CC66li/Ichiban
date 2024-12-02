@@ -49,7 +49,13 @@ public class GetReceipePresenter implements GetReceipeOutputBoundary {
     }
 
     @Override
-    public void switchToLogInView() {
+    public void switchToLoggedInView() {
+        viewManagerModel.setState(loggedInViewModel.getViewName());
+        viewManagerModel.firePropertyChanged();
+    }
+
+    @Override
+    public void switchToInputIngredientView() {
         viewManagerModel.setState(getReceipeViewModel.getViewName());
         viewManagerModel.firePropertyChanged();
     }

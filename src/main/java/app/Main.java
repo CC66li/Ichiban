@@ -20,20 +20,22 @@ public class Main {
 
         // Build the application by adding views and use cases
         final JFrame application = appBuilder
+
                                             .addLoginView() // Add the login view
                                             .addSignupView()    // Add the signup view
                                             .addLoggedInView()  // Add the logged-in view
-                                            .addChangePasswordView() // Add the change password view
-                                            .addChangeWeightView()  // Add the change weight view
-                                            .addInputIngredientView()  // Add the input ingredient view
                                             .addSignupUseCase() //Configure the Signup use case
                                             .addLoginUseCase() // Configure the Login use case
                                             .addLogoutUseCase()     // Configure the Logout use case    
-                                            .addCancelUseCase()    // Configure the Cancel use case
+                // Configure the Cancel use case
                                             .addChangePasswordUseCase() // Configure the Change Password use case
-                                            .addLoggedInUseCase()  // Configure the Logged In use case
+                .addChangePasswordCancelUseCase()
+                                            .addLoggedInUseCase()
+                .addLoggedInCancelUseCase()// Configure the Logged In use case
                                             .addChangeWeightUseCase() // Configure the Change Weight use case
+                .addChangeWeightCancelUseCase()
                                             .addGetReceiptUseCase() // Configure the Get Receipt use case
+                .addInputIngredientCancelUseCase()
                                             .build(); // Build the application
 
          // Pack the JFrame to fit its components

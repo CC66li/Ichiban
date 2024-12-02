@@ -3,7 +3,6 @@ package use_case.get_receipe;
 import entity.User;
 import entity.UserFactory;
 import org.json.JSONArray;
-import use_case.logged_in.LoggedInInputData;
 import use_case.login.LoginInputData;
 
 
@@ -46,7 +45,10 @@ public class GetReceipeInteractor implements GetReceipeInputBoundary {
     }
 
     @Override
-    public void switchToLogInView() {
-        userPresenter.switchToLogInView();
+    public void switchToLoggedInView() {userPresenter.switchToLoggedInView();}
+
+    @Override
+    public void switchToInputIngredientView() {
+        userPresenter.switchToInputIngredientView();
     }
 }
