@@ -41,11 +41,6 @@ public class InMemoryUserDataAccessObject implements SignupUserDataAccessInterfa
     private static final String CONTENT_TYPE_LABEL = "Content-Type";
     private static final String CONTENT_TYPE_JSON = "application/json";
 
-    /**
-     * Checks if a user exists by their username.
-     * @param identifier the username to check
-     * @return true if the user exists, false otherwise
-     */
     @Override
     public boolean existsByName(String identifier) {
         return users.containsKey(identifier);
@@ -102,23 +97,24 @@ public class InMemoryUserDataAccessObject implements SignupUserDataAccessInterfa
 
 
         // According to the input get the url
-
         // TestCase:
-//        String requestUrl = "https://api.spoonacular.com/recipes/findByIngredients?ingredients=apples,banana&number=9&apiKey=f62ece60c5ea4861adfbf94e38c1a16b";
+        String requestUrl = "https://api.spoonacular.com/recipes/findByIngredients?ingredients=apples,banana&number=3&apiKey=f62ece60c5ea4861adfbf94e38c1a16b";
 
-        String[] ingredients = user.getIngredient();
-        String requestUrl = "https://api.spoonacular.com/recipes/findByIngredients?ingredients=";
 
-        if (ingredients != null) {
-            requestUrl += ingredients[0];
 
-            for (int i = 1; i < ingredients.length; i++) {
-                requestUrl += "," + ingredients[i];
-            }
-        } else{
-            throw new IllegalArgumentException("Ingredients cannot be null. Please provide valid ingredients.");
-        }
-        requestUrl += "&number=3&apiKey=f62ece60c5ea4861adfbf94e38c1a16b";
+//        String[] ingredients = user.getIngredient();
+//        String requestUrl = "https://api.spoonacular.com/recipes/findByIngredients?ingredients=";
+//
+//        if (ingredients != null) {
+//            requestUrl += ingredients[0];
+//
+//            for (int i = 1; i < ingredients.length; i++) {
+//                requestUrl += "," + ingredients[i];
+//            }
+//        } else{
+//            throw new IllegalArgumentException("Ingredients cannot be null. Please provide valid ingredients.");
+//        }
+//        requestUrl += "&number=3&apiKey=f62ece60c5ea4861adfbf94e38c1a16b";
 
         // Build the HTTP GET request
         final Request request = new Request.Builder()
