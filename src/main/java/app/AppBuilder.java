@@ -83,6 +83,9 @@ public class AppBuilder {
     private GetReceipeViewModel getReceipeViewModel;
     private InputIngredientView inputIngredientView;
 
+        /**
+     * Initializes the card layout for managing views.
+     */
     public AppBuilder() {
         cardPanel.setLayout(cardLayout);
     }
@@ -154,7 +157,7 @@ public class AppBuilder {
     }
 
     /**
-     * Adds the Signup Use Case to the application.
+     * Configures the Signup Use Case.
      * @return this builder
      */
     public AppBuilder addSignupUseCase() {
@@ -169,7 +172,7 @@ public class AppBuilder {
     }
 
     /**
-     * Adds the Login Use Case to the application.
+     * Configures the Login Use Case.
      * @return this builder
      */
     public AppBuilder addLoginUseCase() {
@@ -184,7 +187,7 @@ public class AppBuilder {
     }
 
     /**
-     * Adds the Change Weight Use Case to the application.
+     * Configures the Change Weight Use Case.
      * @return this builder
      */
     public AppBuilder addChangeWeightUseCase() {
@@ -201,7 +204,7 @@ public class AppBuilder {
     }
 
     /**
-     * Adds the Change Password Use Case to the application.
+     * Configures the Change Password Use Case.
      * @return this builder
      */
     public AppBuilder addChangePasswordUseCase() {
@@ -218,7 +221,7 @@ public class AppBuilder {
     }
 
     /**
-     * Adds the GetReceipt Use Case to the application.
+     * Configures the Get Receipt Use Case.
      * @return this builder
      */
     public AppBuilder addGetReceiptUseCase() {
@@ -236,7 +239,7 @@ public class AppBuilder {
     }
 
     /**
-     * Adds the LoggedIn Use Case to the application.
+     * Configures the LoggedIn Use Case.
      * @return this builder
      */
     public AppBuilder addLoggedInUseCase() {
@@ -252,7 +255,7 @@ public class AppBuilder {
     }
 
     /**
-     * Adds the Logout Use Case to the application.
+     * Configures the Logout Use Case.
      * @return this builder
      */
     public AppBuilder addLogoutUseCase() {
@@ -268,7 +271,7 @@ public class AppBuilder {
     }
 
     /**
-     * Adds the Logout Use Case to the application.
+     * Configures the Cancel Use Case.
      * @return this builder
      */
     public AppBuilder addCancelUseCase() {
@@ -284,15 +287,15 @@ public class AppBuilder {
     }
 
     /**
-     * Creates the JFrame for the application and initially sets the SignupView to be displayed.
-     * @return the application
+     * Builds the JFrame and sets the initial view.
+     * @return the application JFrame
      */
     public JFrame build() {
         final JFrame application = new JFrame("Login Example");
         application.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         application.add(cardPanel);
-
+        // Set the initial state to Signup View
         viewManagerModel.setState(signupView.getViewName());
         viewManagerModel.firePropertyChanged();
 
