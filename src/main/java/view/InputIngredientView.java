@@ -199,9 +199,9 @@ public class InputIngredientView extends JPanel implements PropertyChangeListene
                         ingredientPanel.add(errorLabel);
                     }
                 }
-            }
-            else{
-                System.out.println("No ingredients found.");
+            } else{
+                JLabel errorLabel = new JLabel("No recipes found.");
+                ingredientPanel.add(errorLabel);
             }
         } catch (Exception e) {
             JLabel errorLabel = new JLabel("Error fetching or displaying ingredients: " + e.getMessage());
@@ -216,10 +216,6 @@ public class InputIngredientView extends JPanel implements PropertyChangeListene
 
     public void setLogoutController(LogoutController logoutController) {
         this.logoutController = logoutController;
-    }
-
-    public void setGetReceipeController(GetReceipeController getReceipeController) {
-        this.getReceipeController = getReceipeController;
     }
 
     public String getViewName() {
