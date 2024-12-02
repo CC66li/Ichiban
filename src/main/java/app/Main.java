@@ -24,9 +24,6 @@ public class Main {
                                             .addLoginView() // Add the login view
                                             .addSignupView()    // Add the signup view
                                             .addLoggedInView()  // Add the logged-in view
-                                            .addChangePasswordView() // Add the change password view
-                                            .addChangeWeightView()  // Add the change weight view
-                                            .addInputIngredientView()  // Add the input ingredient view
                                             .addSignupUseCase() //Configure the Signup use case
                                             .addLoginUseCase() // Configure the Login use case
                                             .addLogoutUseCase()     // Configure the Logout use case    
