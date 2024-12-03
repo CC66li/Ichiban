@@ -20,5 +20,10 @@ public interface GetReceipeOutputBoundary {
     /**
      * Executes the switch to receipt generator view use case.
      */
-    void switchToReceiptView();
+    void switchToLoggedInView();
+
+    /**
+     * Executes the switch to input Ingredient generator view use case.
+     */
+    void switchToInputIngredientView();
 }

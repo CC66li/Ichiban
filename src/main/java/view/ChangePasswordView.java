@@ -22,7 +22,7 @@ public class ChangePasswordView extends JPanel implements PropertyChangeListener
 
     private final ChangePasswordViewModel changePasswordViewModel;
     private final JLabel passwordErrorField = new JLabel();
-    private ChangePasswordController changePasswordController;
+    private final ChangePasswordController changePasswordController;
     private LogoutController logoutController;
 
     private JButton confirm;
@@ -31,8 +31,10 @@ public class ChangePasswordView extends JPanel implements PropertyChangeListener
 
     private final JPasswordField passwordInputField = new JPasswordField(15);
 
-    public ChangePasswordView(ChangePasswordViewModel changePasswordViewModel) {
+    public ChangePasswordView(ChangePasswordViewModel changePasswordViewModel,
+                              ChangePasswordController changePasswordController) {
         this.changePasswordViewModel = changePasswordViewModel;
+        this.changePasswordController = changePasswordController;
         this.changePasswordViewModel.addPropertyChangeListener(this);
 
         final JLabel usernameInfo = new JLabel("Currently logged in: ");
@@ -54,10 +56,10 @@ public class ChangePasswordView extends JPanel implements PropertyChangeListener
                 new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
                         if (evt.getSource().equals(confirm)) {
-                            final ChangePasswordState currentState = changePasswordViewModel.getState();
+                            final ChangePasswordState currentState = ChangePasswordView.this.changePasswordViewModel.getState();
 
-                            changePasswordController.execute(
-                                    currentState.getUsername(),
+                            ChangePasswordView.this.changePasswordController.execute(
+                                    currentState.getName(),
                                     currentState.getPassword(),
                                     currentState.getHeight(),
                                     currentState.getWeight(),
@@ -91,9 +93,9 @@ public class ChangePasswordView extends JPanel implements PropertyChangeListener
 
         passwordInputField.getDocument().addDocumentListener(new DocumentListener() {
             private void documentListenerHelper() {
-                final ChangePasswordState currentState = changePasswordViewModel.getState();
+                final ChangePasswordState currentState = ChangePasswordView.this.changePasswordViewModel.getState();
                 currentState.setPassword(passwordInputField.getText());
-                changePasswordViewModel.setState(currentState);
+                ChangePasswordView.this.changePasswordViewModel.setState(currentState);
             }
 
             @Override
@@ -147,16 +149,12 @@ public class ChangePasswordView extends JPanel implements PropertyChangeListener
         this.logoutController = logoutController;
     }
 
-    public void setChangePasswordController(ChangePasswordController changePasswordController) {
-        this.changePasswordController = changePasswordController;
-    }
-
     private void changePasswordListener() {
         passwordInputField.getDocument().addDocumentListener(new DocumentListener() {
 
             private void documentListenerHelper() {
                 final ChangePasswordState currentState = changePasswordViewModel.getState();
-                currentState.setUsername(passwordInputField.getText());
+                currentState.setPassword(passwordInputField.getText());
                 changePasswordViewModel.setState(currentState);
             }
 

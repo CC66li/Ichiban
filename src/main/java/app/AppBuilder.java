@@ -1,7 +1,6 @@
 package app;
 
 import java.awt.CardLayout;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
@@ -16,6 +15,7 @@ import interface_adapter.change_password.ChangePasswordViewModel;
 import interface_adapter.change_password.LoggedInViewModel;
 import interface_adapter.change_weight.ChangeWeightController;
 import interface_adapter.change_weight.ChangeWeightPresenter;
+import interface_adapter.change_weight.ChangeWeightViewModel;
 import interface_adapter.get_receipe.GetReceipeController;
 import interface_adapter.get_receipe.GetReceipePresenter;
 import interface_adapter.get_receipe.GetReceipeViewModel;
@@ -53,27 +53,23 @@ import use_case.logged_in.LoggedInOutputBoundary;
 import view.*;
 
 /**
- * The AppBuilder class is responsible for putting together the pieces of
- * our CA architecture; piece by piece.
- * <p/>
- * This is done by adding each View and then adding related Use Cases.
+ * The AppBuilder class configures the application's MVC components 
+ * and sets up the views and use cases.
  */
-// Checkstyle note: you can ignore the "Class Data Abstraction Coupling"
-//                  and the "Class Fan-Out Complexity" issues for this lab; we encourage
-//                  your team to think about ways to refactor the code to resolve these
-//                  if your team decides to work with this as your starter code
-//                  for your final project this term.
 public class AppBuilder {
+
+        // GUI components
     private final JPanel cardPanel = new JPanel();
     private final CardLayout cardLayout = new CardLayout();
-    // thought question: is the hard dependency below a problem?
+
+        // Core application dependencies
     private final UserFactory userFactory = new CommonUserFactory();
     private final ViewManagerModel viewManagerModel = new ViewManagerModel();
     private final ViewManager viewManager = new ViewManager(cardPanel, cardLayout, viewManagerModel);
 
-    // thought question: is the hard dependency below a problem?
     private final InMemoryUserDataAccessObject userDataAccessObject = new InMemoryUserDataAccessObject();
 
+         // View and ViewModel references
     private SignupView signupView;
     private SignupViewModel signupViewModel;
     private LoginViewModel loginViewModel;
@@ -81,10 +77,15 @@ public class AppBuilder {
     private LoggedInView loggedInView;
     private LoginView loginView;
     private ChangePasswordViewModel changePasswordViewModel;
+    private ChangeWeightViewModel changeWeightViewModel;
     private ChangePasswordView changePasswordView;
+    private ChangeWeightView changeWeightView;
     private GetReceipeViewModel getReceipeViewModel;
     private InputIngredientView inputIngredientView;
 
+        /**
+     * Initializes the card layout for managing views.
+     */
     public AppBuilder() {
         cardPanel.setLayout(cardLayout);
     }
@@ -117,25 +118,47 @@ public class AppBuilder {
      */
     public AppBuilder addLoggedInView() {
         loggedInViewModel = new LoggedInViewModel();
-        loggedInView = new LoggedInView(loggedInViewModel);
+        getReceipeViewModel = new GetReceipeViewModel();
+        loggedInView = new LoggedInView(loggedInViewModel, getReceipeViewModel);
         cardPanel.add(loggedInView, loggedInView.getViewName());
         return this;
     }
 
-    /**
-     * Adds the ChangePassword View to the application.
-     * @return this builder
-     */
-    public AppBuilder addChangePasswordView() {
-        changePasswordViewModel = new ChangePasswordViewModel();
-        changePasswordView = new ChangePasswordView(changePasswordViewModel);
-        cardPanel.add(loggedInView, loggedInView.getViewName());
-        return this;
-    }
+//    /**
+//     * Adds the ChangePassword View to the application.
+//     * @return this builder
+//     */
+//    public AppBuilder addChangePasswordView() {
+//        changePasswordViewModel = new ChangePasswordViewModel();
+//        changePasswordView = new ChangePasswordView(changePasswordViewModel);
+//        cardPanel.add(changePasswordView, changePasswordView.getViewName());
+//        return this;
+//    }
 
+//    /**
+//     * Adds the ChangeWeight View to the application.
+//     * @return this builder
+//     */
+//    public AppBuilder addChangeWeightView() {
+//        changeWeightViewModel = new ChangeWeightViewModel();
+//        changeWeightView = new ChangeWeightView(changeWeightViewModel);
+//        cardPanel.add(changeWeightView, changeWeightView.getViewName());
+//        return this;
+//    }
+
+//    /**
+//     * Adds the Generate Receipt View to the application.
+//     * @return this builder
+//     */
+//    public AppBuilder addInputIngredientView() {
+//        getReceipeViewModel = new GetReceipeViewModel();
+//        inputIngredientView = new InputIngredientView(getReceipeViewModel);
+//        cardPanel.add(inputIngredientView, inputIngredientView.getViewName());
+//        return this;
+//    }
 
     /**
-     * Adds the Signup Use Case to the application.
+     * Configures the Signup Use Case.
      * @return this builder
      */
     public AppBuilder addSignupUseCase() {
@@ -150,7 +173,7 @@ public class AppBuilder {
     }
 
     /**
-     * Adds the Login Use Case to the application.
+     * Configures the Login Use Case.
      * @return this builder
      */
     public AppBuilder addLoginUseCase() {
@@ -165,27 +188,33 @@ public class AppBuilder {
     }
 
     /**
-     * Adds the Change Weight Use Case to the application.
+     * Configures the Change Weight Use Case.
      * @return this builder
      */
     public AppBuilder addChangeWeightUseCase() {
+        changeWeightViewModel = new ChangeWeightViewModel();
         final ChangeWeightOutputBoundary changeWeightOutputBoundary =
-                new ChangeWeightPresenter(loggedInViewModel);
+                new ChangeWeightPresenter(loggedInViewModel, viewManagerModel, changeWeightViewModel);
 
         final ChangeWeightInputBoundary changeWeightInteractor =
                 new ChangeWeightInteractor(userDataAccessObject, changeWeightOutputBoundary, userFactory);
 
-        final ChangeWeightController changeWeightController =
-                new ChangeWeightController(changeWeightInteractor);
+        final ChangeWeightController changeWeightController = new ChangeWeightController(changeWeightInteractor);
+
         loggedInView.setChangeWeightController(changeWeightController);
+
+        changeWeightView = new ChangeWeightView(changeWeightViewModel, changeWeightController);
+        cardPanel.add(changeWeightView, changeWeightView.getViewName());
         return this;
     }
 
     /**
-     * Adds the Change Password Use Case to the application.
+     * Configures the Change Password Use Case.
      * @return this builder
      */
     public AppBuilder addChangePasswordUseCase() {
+        changePasswordViewModel = new ChangePasswordViewModel();
+
         final ChangePasswordOutputBoundary changePasswordOutputBoundary =
                 new ChangePasswordPresenter(loggedInViewModel, viewManagerModel, changePasswordViewModel);
 
@@ -194,17 +223,23 @@ public class AppBuilder {
 
         final ChangePasswordController changePasswordController =
                 new ChangePasswordController(changePasswordInteractor);
+
         loggedInView.setChangePasswordController(changePasswordController);
+
+        changePasswordView = new ChangePasswordView(changePasswordViewModel, changePasswordController);
+        cardPanel.add(changePasswordView, changePasswordView.getViewName());
         return this;
     }
 
     /**
-     * Adds the GetReceipt Use Case to the application.
+     * Configures the Get Receipt Use Case.
      * @return this builder
      */
     public AppBuilder addGetReceiptUseCase() {
+        getReceipeViewModel = new GetReceipeViewModel();
+
         final GetReceipeOutputBoundary getReceipeOutputBoundary = new GetReceipePresenter(viewManagerModel,
-                getReceipeViewModel, loginViewModel);
+                getReceipeViewModel, loggedInViewModel);
 
         final GetReceipeInputBoundary getReceipeInteractor =
                 new GetReceipeInteractor(userDataAccessObject, getReceipeOutputBoundary, userFactory);
@@ -212,12 +247,16 @@ public class AppBuilder {
         final GetReceipeController getReceipeController =
                 new GetReceipeController(getReceipeInteractor);
 
-        inputIngredientView.setGetReceipeController(getReceipeController);
+        loggedInView.setGetReceipeController(getReceipeController);
+
+        inputIngredientView = new InputIngredientView(getReceipeViewModel,
+                getReceipeController);
+        cardPanel.add(inputIngredientView, inputIngredientView.getViewName());
         return this;
     }
 
     /**
-     * Adds the LoggedIn Use Case to the application.
+     * Configures the LoggedIn Use Case.
      * @return this builder
      */
     public AppBuilder addLoggedInUseCase() {
@@ -229,11 +268,12 @@ public class AppBuilder {
 
         final LoggedInController loggedInController = new LoggedInController(loggedInInteractor);
         loggedInView.setLoggedInController(loggedInController);
+
         return this;
     }
 
     /**
-     * Adds the Logout Use Case to the application.
+     * Configures the Logout Use Case.
      * @return this builder
      */
     public AppBuilder addLogoutUseCase() {
@@ -249,10 +289,10 @@ public class AppBuilder {
     }
 
     /**
-     * Adds the Logout Use Case to the application.
+     * Configures the Cancel Use Case.
      * @return this builder
      */
-    public AppBuilder addCancelUseCase() {
+    public AppBuilder addLoggedInCancelUseCase() {
         final LogoutOutputBoundary logoutOutputBoundary = new LogoutPresenter(viewManagerModel,
                 loggedInViewModel, loginViewModel);
 
@@ -261,19 +301,71 @@ public class AppBuilder {
 
         final LogoutController logoutController = new LogoutController(logoutInteractor);
         loggedInView.setLogoutController(logoutController);
+
         return this;
     }
 
     /**
-     * Creates the JFrame for the application and initially sets the SignupView to be displayed.
-     * @return the application
+     * Configures the Cancel Use Case.
+     * @return this builder
+     */
+    public AppBuilder addChangeWeightCancelUseCase() {
+        final LogoutOutputBoundary logoutOutputBoundary = new LogoutPresenter(viewManagerModel,
+                loggedInViewModel, loginViewModel);
+
+        final LogoutInputBoundary logoutInteractor =
+                new LogoutInteractor(userDataAccessObject, logoutOutputBoundary);
+
+        final LogoutController logoutController = new LogoutController(logoutInteractor);
+        changeWeightView.setLogoutController(logoutController);
+
+        return this;
+    }
+
+    /**
+     * Configures the Cancel Use Case.
+     * @return this builder
+     */
+    public AppBuilder addChangePasswordCancelUseCase() {
+        final LogoutOutputBoundary logoutOutputBoundary = new LogoutPresenter(viewManagerModel,
+                loggedInViewModel, loginViewModel);
+
+        final LogoutInputBoundary logoutInteractor =
+                new LogoutInteractor(userDataAccessObject, logoutOutputBoundary);
+
+        final LogoutController logoutController = new LogoutController(logoutInteractor);
+
+        changePasswordView.setLogoutController(logoutController);
+        return this;
+    }
+
+    /**
+     * Configures the Cancel Use Case.
+     * @return this builder
+     */
+    public AppBuilder addInputIngredientCancelUseCase() {
+        final LogoutOutputBoundary logoutOutputBoundary = new LogoutPresenter(viewManagerModel,
+                loggedInViewModel, loginViewModel);
+
+        final LogoutInputBoundary logoutInteractor =
+                new LogoutInteractor(userDataAccessObject, logoutOutputBoundary);
+
+        final LogoutController logoutController = new LogoutController(logoutInteractor);
+
+        inputIngredientView.setLogoutController(logoutController);
+        return this;
+    }
+
+    /**
+     * Builds the JFrame and sets the initial view.
+     * @return the application JFrame
      */
     public JFrame build() {
-        final JFrame application = new JFrame("Login Example");
+        final JFrame application = new JFrame("Login Information");
         application.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         application.add(cardPanel);
-
+        // Set the initial state to Signup View
         viewManagerModel.setState(signupView.getViewName());
         viewManagerModel.firePropertyChanged();
 

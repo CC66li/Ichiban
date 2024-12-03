@@ -1,5 +1,7 @@
 package interface_adapter.change_weight;
 
+import entity.CommonUser;
+
 /**
  * The state for the Change weight View Model.
  */
@@ -17,21 +19,20 @@ public class ChangeWeightState {
     private String[] ingredient;
 
     public ChangeWeightState(ChangeWeightState copy) {
-        username = copy.username;
-        password = copy.password;
-        height = copy.height;
-        weight = copy.weight;
-        gender = copy.gender;
-        age = copy.age;
-        passwordError = copy.passwordError;
+        username = copy.getUsername();
+        password = copy.getPassword();
+        height = copy.getHeight();
+        weight = copy.getWeight();
+        gender = copy.getGender();
+        age = copy.getAge();
+        passwordError = null;
         mealType = copy.getMealType();
         allergy = copy.getAllergy();
         cuisineType = copy.getCuisineType();
         ingredient = copy.getIngredient();
     }
 
-    // default
-    public ChangeWeightState(){}
+    public ChangeWeightState() {}
 
     public String getUsername() {
         return username;

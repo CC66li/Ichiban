@@ -39,4 +39,10 @@ public class ChangePasswordPresenter implements ChangePasswordOutputBoundary {
     public void prepareFailView(String error) {
         // note: this use case currently can't fail
     }
+
+    @Override
+    public void switchToChangePasswordView() {
+        viewManagerModel.setState(changePasswordViewModel.getViewName());
+        viewManagerModel.firePropertyChanged();
+    }
 }

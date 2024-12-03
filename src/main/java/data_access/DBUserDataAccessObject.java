@@ -1,10 +1,6 @@
 package data_access;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,7 +23,8 @@ import use_case.logout.LogoutUserDataAccessInterface;
 import use_case.signup.SignupUserDataAccessInterface;
 
 /**
- * The DAO for user data.
+ * Data Access Object (DAO) implementation for handling user-related data operations.
+ * This class interacts with an external REST API for CRUD operations.
  */
 public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         LoginUserDataAccessInterface,
@@ -36,13 +33,17 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         LogoutUserDataAccessInterface,
         GetReceipeUserDataAccessInterface,
         LoggedInUserDataAccessInterface {
+            // Constants for API interaction
     private static final int SUCCESS_CODE = 200;
     private static final String CONTENT_TYPE_LABEL = "Content-Type";
     private static final String CONTENT_TYPE_JSON = "application/json";
     private static final String STATUS_CODE_LABEL = "status_code";
+    private static final String MESSAGE = "message";
+
+
+    // User attributes keys
     private static final String USERNAME = "username";
     private static final String PASSWORD = "password";
-    private static final String MESSAGE = "message";
     private static final String HEIGHT = "height";
     private static final String WEIGHT = "weight";
     private static final String GENDER = "male";
@@ -51,14 +52,24 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
     private static final String CUISINETYPE = "cuisineType";
     private static final String ALLERGY = "allergy";
     private static final String INGREDIENT = "ingredient";
-    private String currentUsername;
 
+    private String currentUsername;
     private final UserFactory userFactory;
 
+    /**
+     * Constructor to initialize the DAO with a UserFactory.
+     * @param userFactory the factory to create User objects
+     */
     public DBUserDataAccessObject(UserFactory userFactory) {
 
         this.userFactory = userFactory;
     }
+
+    /**
+     * Fetches a User by username.
+     * @param username the username to fetch
+     * @return the User object if found
+     */
     @Override
     public User get(String username) {
         // Make an API call to get the user object.
@@ -105,6 +116,11 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         this.currentUsername = name;
     }
 
+    /**
+     * Checks if a user exists by username.
+     * @param username the username to check
+     * @return true if the user exists, false otherwise
+     */
     @Override
     public boolean existsByName(String username) {
         final OkHttpClient client = new OkHttpClient().newBuilder()
@@ -125,6 +141,10 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         }
     }
 
+    /**
+     * Saves a new user to the database.
+     * @param user the User object to save
+     */
     @Override
     public void save(User user) {
         final OkHttpClient client = new OkHttpClient().newBuilder()
@@ -135,6 +155,8 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         final JSONObject requestBody = new JSONObject();
         requestBody.put(USERNAME, user.getName());
         requestBody.put(PASSWORD, user.getPassword());
+        // New line need to change
+        requestBody.put(INGREDIENT, user.getIngredient());
         final RequestBody body = RequestBody.create(requestBody.toString(), mediaType);
         final Request request = new Request.Builder()
                 .url("http://vm003.teach.cs.toronto.edu:20112/user")
@@ -158,6 +180,10 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         }
     }
 
+    /**
+     * Updates the user's password.
+     * @param user the User object with updated password
+     */
     @Override
     public void changePassword(User user) {
         final OkHttpClient client = new OkHttpClient().newBuilder()
@@ -191,6 +217,10 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         }
     }
 
+    /**
+     * Updates the user's weight.
+     * @param user the User object with updated weight
+     */
     @Override
     public void changeWeight(User user) {
         final OkHttpClient client = new OkHttpClient().newBuilder()
@@ -224,56 +254,49 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         }
     }
 
+    /**
+     * Fetches a list of recipes based on user preferences.
+     * @param user the User object containing preferences
+     * @return a JSONArray of recipes
+     */
     @Override
     public JSONArray getReceipe(User user) {
         final OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
 
-        GetReceipeInputData getReceipeInputData = new GetReceipeInputData(user.getHeight(),
-                user.getWeight(),
-                user.getGender(),
-                user.getAge(),
-                user.getMealType(),
-                user.getCuisineType(),
-                user.getAllergy(),
-                user.getIngredient());
-
         // According to the input get the url
-        String requestUrl = "https://api.edamam.com/api/recipes/v2?type=public&app_id=<ff136c6d>&app_key=<009e6cd694e4752490ac362dc7d>";
-        if (user.getIngredient() != null){
-            for (String item: user.getIngredient()){
-                requestUrl += "&q=" + item;
+        String[] ingredients = user.getIngredient();
+        String requestUrl = "https://api.spoonacular.com/recipes/findByIngredients?ingredients=";
+        if (ingredients != null) {
+            requestUrl += ingredients[0];
+
+            for (int i = 1; i < ingredients.length; i++) {
+                requestUrl += "," + ingredients[i];
             }
         }
-        if (user.getAllergy() != null){
-            requestUrl += "&health=" + user.getAllergy();
-        }
-        if (user.getCuisineType() != null){
-            requestUrl += "&cuisineType=" + user.getCuisineType();
-        }
-        requestUrl += "&calories=0-" + getReceipeInputData.getBMR();
+        requestUrl += "&number=3&apiKey=f62ece60c5ea4861adfbf94e38c1a16b";
 
-
+        System.out.println("Request URL: " + requestUrl);
         final Request request = new Request.Builder()
                 .url(requestUrl)
                 .method("GET", null)
                 .addHeader(CONTENT_TYPE_LABEL, CONTENT_TYPE_JSON)
                 .build();
 
-        try {
-            final Response response = client.newCall(request).execute();
-            final JSONObject responseBody = new JSONObject(response.body().string());
+        try (Response response = client.newCall(request).execute()) {
 
-            if (responseBody.getInt(STATUS_CODE_LABEL) == SUCCESS_CODE) {
-                return responseBody.getJSONArray("hits");
-            }
-            else {
-                throw new RuntimeException(responseBody.getString(MESSAGE));
+            if (response.isSuccessful() && response.body() != null) {
+                final JSONArray responseBody = new JSONArray(response.body().string());
+                return responseBody;
+
+            } else {
+                System.out.println("Request failed: " + response.code());
             }
 
         } catch (IOException | JSONException ex) {
             throw new RuntimeException(ex);
         }
+        return null;
     }
 
     @Override
